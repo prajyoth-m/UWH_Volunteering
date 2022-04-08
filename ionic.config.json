@@ -1,0 +1,7 @@
+{
+  "name": "UWH_Volunteering",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
