@@ -81,4 +81,8 @@ export class FirebaseService {
     twitterProvider.addScope('email');
     signInWithRedirect(this.auth, twitterProvider);
   }
+
+  getEvents(){
+    return getDocs(collection(db,'events'));
+  }
 }

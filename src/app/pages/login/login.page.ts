@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 import { getRedirectResult } from 'firebase/auth';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -12,17 +13,32 @@ export class LoginPage implements OnInit {
   email: string;
   password: string;
   errorMessage: string;
+  loading: any;
 
-  constructor(private firebase: FirebaseService, private router: Router) {
-    getRedirectResult(this.firebase.auth).then((data) => {
-      const user = data.user;
-      this.navigate(user);
-    }).catch(e=>{
-      console.error(e);
-    });
+  constructor(
+    private firebase: FirebaseService,
+    private router: Router,
+    private loadingController: LoadingController
+  ) {
+
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.loading = await this.loadingController.create({
+      cssClass: 'loader',
+      message: 'Please wait while we fetch your login details...',
+    });
+    this.presentLoading();
+    getRedirectResult(this.firebase.auth)
+      .then((data) => {
+        this.loading.dismiss();
+        const user = data.user;
+        this.navigate(user);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }
 
   doLogin() {
     this.firebase
@@ -45,7 +61,7 @@ export class LoginPage implements OnInit {
   facebookLogin() {
     this.firebase.doFacebookLogin();
   }
-  twitterLogin(){
+  twitterLogin() {
     this.firebase.doTwitterLogin();
   }
 
@@ -55,5 +71,9 @@ export class LoginPage implements OnInit {
     } else {
       this.router.navigateByUrl('/home');
     }
+  }
+
+  async presentLoading() {
+    await this.loading.present();
   }
 }
