@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card style="margin-top: 4rem;">
+    <ion-card-header>
+      <ion-card-title
+        >We need the below data to complete your profile.</ion-card-title
+      >
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid style="width: 75%">
+        <ion-col>
+          <ion-item fill="outline" mode="md">
+            <ion-label position="floating">Display Name</ion-label>
+            <ion-input
+              type="text"
+              inputmode="email"
+              autocomplete="off"
+              autocorrect="off"
+              required
+              [(ngModel)]="displayName"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item fill="outline" mode="md">
+            <ion-label position="floating">Phone Number</ion-label>
+            <ion-input
+              type="number"
+              inputmode="email"
+              autocomplete="off"
+              autocorrect="off"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <div id="recaptcha-container"></div>
+        </ion-col>
+      </ion-grid>
+      <ion-button expand="full">Submit</ion-button>
+    </ion-card-content>
+
+  </ion-card>
+</ion-content>

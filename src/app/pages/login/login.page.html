@@ -1,34 +1,77 @@
 <div class="container">
-	<div class="screen">
-		<div class="screen__content">
-			<form class="login">
-				<div class="login__field">
-					<ion-icon class="login__icon" name="person"></ion-icon>
-					<input type="text" class="login__input" placeholder="Email" name="email" [(ngModel)]="email">
-				</div>
-				<div class="login__field">
-					<ion-icon class="login__icon" name="lock-closed"></ion-icon>
-					<input type="password" class="login__input" placeholder="Password" name="password" [(ngModel)]="password">
-				</div>
-				<button class="button login__submit" (click)="doLogin()">
-					<span class="button__text">Log In Now</span>
-					<ion-icon class="button__icon" name="arrow-forward-circle-outline"></ion-icon>
-				</button>
-			</form>
-			<div class="social-login">
-				<h3>log in via</h3>
-				<div class="social-icons">
-					<ion-button><ion-icon name="logo-google"></ion-icon></ion-button>
-					<ion-button><ion-icon name="logo-facebook"></ion-icon></ion-button>
-					<ion-button><ion-icon name="logo-twitter"></ion-icon></ion-button>
-				</div>
-			</div>
-		</div>
-		<div class="screen__background">
-			<span class="screen__background__shape screen__background__shape4"></span>
-			<span class="screen__background__shape screen__background__shape3"></span>
-			<span class="screen__background__shape screen__background__shape2"></span>
-			<span class="screen__background__shape screen__background__shape1"></span>
-		</div>
-	</div>
+  <div class="screen">
+    <div class="screen__content">
+      <form class="login">
+        <div id="InfoBanner" *ngIf="errorMessage!==undefined">
+          <span class="reversed reversedRight">
+            <span>
+              &#9888;
+            </span>
+          </span>
+          <span class="reversed reversedLeft">
+            {{errorMessage}}
+          </span>
+        </div>
+        <ion-item>
+          <ion-icon name="mail"></ion-icon>
+          <ion-input
+            type="text"
+            placeholder="Email"
+            name="email"
+            (ngModelChange)="inputChange()"
+            [(ngModel)]="email"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="lock-closed"></ion-icon>
+          <ion-input
+            type="password"
+            placeholder="Password"
+            name="password"
+            (ngModelChange)="inputChange()"
+            [(ngModel)]="password"
+          ></ion-input>
+        </ion-item>
+        <button class="button login__submit" (click)="doLogin()">
+          <span class="button__text">Log In Now</span>
+          <ion-icon
+            class="button__icon"
+            name="arrow-forward-circle-outline"
+          ></ion-icon>
+        </button>
+      </form>
+      <div class="social-login">
+        <h1 style="padding-bottom: 1rem">log in via</h1>
+        <div class="social-icons">
+          <ion-button fill="clear"
+            ><ion-icon
+              slot="icon-only"
+              color="light"
+              name="logo-google"
+            ></ion-icon
+          ></ion-button>
+          <ion-button fill="clear"
+            ><ion-icon
+              slot="icon-only"
+              color="light"
+              name="logo-facebook"
+            ></ion-icon
+          ></ion-button>
+          <ion-button fill="clear"
+            ><ion-icon
+              slot="icon-only"
+              color="light"
+              name="logo-twitter"
+            ></ion-icon
+          ></ion-button>
+        </div>
+      </div>
+    </div>
+    <div class="screen__background">
+      <span class="screen__background__shape screen__background__shape4"></span>
+      <span class="screen__background__shape screen__background__shape3"></span>
+      <span class="screen__background__shape screen__background__shape2"></span>
+      <span class="screen__background__shape screen__background__shape1"></span>
+    </div>
+  </div>
 </div>

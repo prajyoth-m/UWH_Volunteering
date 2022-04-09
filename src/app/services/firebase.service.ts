@@ -4,7 +4,11 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { environment } from './firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
 
 // Initialize Firebase
 const app = initializeApp(environment.firebaseConfig);
@@ -36,4 +40,10 @@ export class FirebaseService {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
+  updateProfile(displayNameInput: string, phoneNumberInput: number, photoURLInput: string) {
+    return updateProfile(this.auth.currentUser, {
+      displayName: displayNameInput,
+      photoURL: photoURLInput,
+    });
+  }
 }

@@ -10,8 +10,9 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 export class LoginPage implements OnInit {
   email: string;
   password: string;
+  errorMessage: string;
 
-  constructor(private firebase: FirebaseService,private router: Router,) {}
+  constructor(private firebase: FirebaseService, private router: Router) {}
 
   ngOnInit() {}
 
@@ -19,12 +20,19 @@ export class LoginPage implements OnInit {
     this.firebase
       .doLogin(this.email, this.password)
       .then((data) => {
-        this.router.navigateByUrl('/home');
+        const user = data.user;
+        if (!user.displayName || !user.phoneNumber) {
+          this.router.navigateByUrl('/first-login');
+        } else {
+          this.router.navigateByUrl('/home');
+        }
       })
       .catch((e) => {
-        console.log('Login failed');
-        console.log(e.message);
+        console.error(e);
+        this.errorMessage = 'Incorrect email or password provided!';
       });
-      console.log(this.firebase.auth.currentUser);
+  }
+  inputChange() {
+    this.errorMessage = undefined;
   }
 }

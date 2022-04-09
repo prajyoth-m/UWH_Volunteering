@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Auth } from 'firebase/auth';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-home',
@@ -6,7 +8,8 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-
-  constructor() {}
-
+  currentUser: Auth['currentUser'];
+  constructor(private firebase: FirebaseService) {
+    this.currentUser = firebase.auth.currentUser;
+  }
 }
