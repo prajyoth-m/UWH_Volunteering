@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { getRedirectResult } from 'firebase/auth';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -12,7 +13,14 @@ export class LoginPage implements OnInit {
   password: string;
   errorMessage: string;
 
-  constructor(private firebase: FirebaseService, private router: Router) {}
+  constructor(private firebase: FirebaseService, private router: Router) {
+    getRedirectResult(this.firebase.auth).then((data) => {
+      const user = data.user;
+      this.navigate(user);
+    }).catch(e=>{
+      console.error(e);
+    });
+  }
 
   ngOnInit() {}
 
@@ -21,11 +29,7 @@ export class LoginPage implements OnInit {
       .doLogin(this.email, this.password)
       .then((data) => {
         const user = data.user;
-        if (!user.displayName || !user.phoneNumber) {
-          this.router.navigateByUrl('/first-login');
-        } else {
-          this.router.navigateByUrl('/home');
-        }
+        this.navigate(user);
       })
       .catch((e) => {
         console.error(e);
@@ -34,5 +38,22 @@ export class LoginPage implements OnInit {
   }
   inputChange() {
     this.errorMessage = undefined;
+  }
+  googleLogin() {
+    this.firebase.doGoogleLogin();
+  }
+  facebookLogin() {
+    this.firebase.doFacebookLogin();
+  }
+  twitterLogin(){
+    this.firebase.doTwitterLogin();
+  }
+
+  navigate(user: any) {
+    if (!user.displayName || !user.phoneNumber) {
+      this.router.navigateByUrl('/first-login');
+    } else {
+      this.router.navigateByUrl('/home');
+    }
   }
 }

@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card style="margin-top: 4rem;">
+  <ion-card style="margin-top: 4rem">
     <ion-card-header>
       <ion-card-title
         >We need the below data to complete your profile.</ion-card-title
@@ -13,7 +13,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-grid style="width: 75%">
-        <ion-col>
+        <ion-col *ngIf="currentUser.displayName===null">
           <ion-item fill="outline" mode="md">
             <ion-label position="floating">Display Name</ion-label>
             <ion-input
@@ -26,7 +26,7 @@
             ></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col>
+        <ion-col *ngIf="currentUser.phoneNumber===null">
           <ion-item fill="outline" mode="md">
             <ion-label position="floating">Phone Number</ion-label>
             <ion-input
@@ -35,15 +35,41 @@
               autocomplete="off"
               autocorrect="off"
               required
+              [(ngModel)]="phoneNumber"
             ></ion-input>
           </ion-item>
         </ion-col>
+        <ion-row>
+          <ion-col>
+            <ion-item fill="outline" mode="md">
+              <ion-label position="floating">Password</ion-label>
+              <ion-input
+                type="text"
+                autocomplete="off"
+                autocorrect="off"
+                required
+                [(ngModel)]="password"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item fill="outline" mode="md">
+              <ion-label position="floating">Confirm Password</ion-label>
+              <ion-input
+                type="text"
+                autocomplete="off"
+                autocorrect="off"
+                required
+                [(ngModel)]="confirmPass"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
         <ion-col>
           <div id="recaptcha-container"></div>
         </ion-col>
       </ion-grid>
-      <ion-button expand="full">Submit</ion-button>
+      <ion-button expand="full" (click)="updateProfile()">Submit</ion-button>
     </ion-card-content>
-
   </ion-card>
 </ion-content>
