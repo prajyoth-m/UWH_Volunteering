@@ -55,7 +55,7 @@ export class FirstLoginPage implements OnInit {
         });
     }
     if (this.displayName) {
-      this.firebase.updateUserProfile(this.displayName, null).then((res) => {
+      this.firebase.updateUserProfile(this.displayName, this.photo).then((res) => {
         if (!this.error) {
           this.router.navigateByUrl('/home');
         }

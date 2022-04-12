@@ -12,11 +12,15 @@ export class HomePage implements OnInit {
   currentUser: Auth['currentUser'];
   registeredEvents: number;
   userRole: string;
+  displayPic: string;
   constructor(private firebase: FirebaseService, private router: Router) {
     this.currentUser = this.firebase.auth.currentUser;
     if (!this.currentUser) {
       this.router.navigateByUrl('');
     }
+    this.displayPic = this.currentUser.photoURL
+      ? this.currentUser.photoURL
+      : '../../../assets/avatar.svg';
   }
   ngOnInit() {}
 
@@ -37,8 +41,16 @@ export class HomePage implements OnInit {
     this.firebase.getRole(this.firebase.auth.currentUser.email).then((snap) => {
       this.userRole = snap.docs.values().next().value.data().role.toLowerCase();
     });
-    this.firebase.getUserByID(this.firebase.auth.currentUser.uid).then(snap=>{
-      this.registeredEvents = snap.data().events.length;
+    this.firebase
+      .getUserByID(this.firebase.auth.currentUser.uid)
+      .then((snap) => {
+        this.registeredEvents = snap.data().events.length;
+      });
+  }
+
+  signOut() {
+    this.firebase.auth.signOut().then((res) => {
+      this.router.navigateByUrl('');
     });
   }
 }
