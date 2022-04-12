@@ -11,15 +11,21 @@ import { Router } from '@angular/router';
 export class FirstLoginPage implements OnInit {
   displayName: string;
   phoneNumber: string;
-  password: string;
-  confirmPass: string;
+  photo: string;
+  email: string;
   currentUser: any;
   error: boolean;
-  constructor(private firebase: FirebaseService, private router: Router) {
-    this.currentUser = firebase.auth.currentUser;
-  }
+  constructor(private firebase: FirebaseService, private router: Router) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.currentUser = this.firebase.auth.currentUser;
+    this.displayName = this.currentUser.displayName;
+    this.phoneNumber = this.currentUser.phoneNumber
+      ? this.currentUser.phoneNumber.replace('+91', '')
+      : '';
+    this.email = this.currentUser.email;
+    this.photo = this.currentUser.photoURL;
+  }
 
   updateProfile() {
     if (this.phoneNumber) {
@@ -54,6 +60,17 @@ export class FirstLoginPage implements OnInit {
           this.router.navigateByUrl('/home');
         }
       });
+    }
+    try {
+      this.firebase.createNewUser(
+        this.email,
+        this.photo,
+        this.firebase.auth.currentUser.uid,
+        this.displayName,
+        this.phoneNumber
+      );
+    } catch (e) {
+      console.error(e);
     }
   }
 }

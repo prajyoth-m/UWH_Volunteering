@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>explore</ion-title>
+    <ion-title>manage-events</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,9 +10,20 @@
       <div style="position: relative">
         <img [src]="event.photo" />
         <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">
-          <ion-fab-button (click)="presentModal(event)">
-            <ion-icon name="add"> </ion-icon>
+          <ion-fab-button>
+            <ion-icon
+              md="caret-back"
+              ios="chevron-back-circle-outline"
+            ></ion-icon>
           </ion-fab-button>
+          <ion-fab-list side="start">
+            <ion-fab-button color="danger" (click)="deleteEvent(event.id)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="light">
+              <ion-icon name="create"></ion-icon>
+            </ion-fab-button>
+          </ion-fab-list>
         </ion-fab>
       </div>
       <ion-card-header>
@@ -59,4 +70,14 @@
       </ion-accordion-group>
     </div>
   </ion-card>
+  <ion-fab
+    horizontal="end"
+    vertical="bottom"
+    slot="fixed"
+    style="margin-right: 1rem; margin-bottom: 1rem"
+  >
+    <ion-fab-button color="primary" (click)="addEventModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

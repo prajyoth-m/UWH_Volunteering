@@ -35,6 +35,30 @@ const routes: Routes = [
     path: 'first-login',
     loadChildren: () => import('./pages/first-login/first-login.module').then( m => m.FirstLoginPageModule)
   },
+  {
+    path: 'contribute-modal',
+    loadChildren: () => import('./pages/contribute-modal/contribute-modal.module').then( m => m.ContributeModalPageModule)
+  },
+  {
+    path: 'manage-events',
+    loadChildren: () => import('./pages/manage-events/manage-events.module').then( m => m.ManageEventsPageModule)
+  },
+  {
+    path: 'add-event',
+    loadChildren: () => import('./pages/add-event/add-event.module').then( m => m.AddEventPageModule)
+  },
+  {
+    path: 'select-location',
+    loadChildren: () => import('./pages/select-location/select-location.module').then( m => m.SelectLocationPageModule)
+  },
+  {
+    path: 'add-session',
+    loadChildren: () => import('./pages/add-session/add-session.module').then( m => m.AddSessionPageModule)
+  },
+  {
+    path: 'manage-people',
+    loadChildren: () => import('./pages/manage-people/manage-people.module').then( m => m.ManagePeoplePageModule)
+  },
 ];
 
 @NgModule({

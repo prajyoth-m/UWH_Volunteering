@@ -1,0 +1,161 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Event</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="height: 1200px">
+  <ion-grid style="width: 85%">
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">Event Name</ion-label>
+        <ion-input
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="eventDetails.name"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">Event Description</ion-label>
+        <ion-input
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="eventDetails.description"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">NGO Name</ion-label>
+        <ion-input
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="eventDetails.ngoName"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">Photo URL</ion-label>
+        <ion-input
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="eventDetails.photo"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">Beneficiaries</ion-label>
+        <ion-input
+          type="number"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="eventDetails.beneficiaries"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">Age Group of Viewers</ion-label>
+        <ion-input
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="eventDetails.ageGroup"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Is Event Virtual</ion-label>
+          <ion-checkbox
+            color="primary"
+            slot="start"
+            [(ngModel)]="eventDetails.isVirtual"
+          ></ion-checkbox>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label>Is Event Physical</ion-label>
+          <ion-checkbox
+            color="primary"
+            slot="start"
+            [(ngModel)]="eventDetails.isPhysical"
+          ></ion-checkbox>
+        </ion-item>
+      </ion-col>
+      <ion-col *ngIf="eventDetails.isPhysical">
+        <ion-button color="tertiary" expand="full" (click)="addLocationModal()">
+          Add Location
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating"
+          >Languages (ex: english,hindi,telugu)</ion-label
+        >
+        <ion-input
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          (focusout)="splitLanguages()"
+          [(ngModel)]="languages"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-card>
+        <ion-item
+          class="ion-activated"
+          *ngFor="let session of eventDetails.dates; let i = index"
+        >
+          <ion-icon name="{{session.icon}}" slot="start"></ion-icon>
+          <ion-label>{{session.description}}</ion-label>
+          <ion-button id="hover-button" fill="clear">
+            <ion-icon
+              slot="icon-only"
+              color="dark"
+              name="calendar-number"
+            ></ion-icon>
+          </ion-button>
+          <ion-button id="hover-button" fill="danger" (click)="removeSession(i)">
+            <ion-icon
+              slot="icon-only"
+              color="dark"
+              name="trash-bin"
+            ></ion-icon>
+          </ion-button>
+          <ion-popover trigger="hover-button" triggerAction="hover">
+            <ng-template>
+              <ion-content>{{session.date.toDate()}}</ion-content>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+        <ion-button color="tertiary" expand="full" (click)="addSessionModal()">
+          Add Session
+        </ion-button>
+      </ion-card>
+    </ion-col>
+  </ion-grid>
+  <ion-button expand="full" color="primary" (click)="addEvent()">Submit</ion-button>
+</ion-content>

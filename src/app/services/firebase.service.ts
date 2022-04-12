@@ -1,8 +1,19 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import {
+  getFirestore,
+  where,
+  collection,
+  getDocs,
+  query,
+  addDoc,
+  GeoPoint,
+  setDoc,
+  doc,
+  deleteDoc,
+  getDoc,
+} from 'firebase/firestore';
 import { environment } from './firebaseConfig';
-import { collection, getDocs } from 'firebase/firestore';
 import {
   FacebookAuthProvider,
   getAuth,
@@ -15,6 +26,7 @@ import {
   updatePhoneNumber,
   updateProfile,
 } from 'firebase/auth';
+import { Event } from '../models/event';
 
 // Initialize Firebase
 const app = initializeApp(environment.firebaseConfig);
@@ -26,6 +38,10 @@ const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 const twitterProvider = new TwitterAuthProvider();
 
+const usersCollection = collection(db, 'users');
+const eventsCollection = collection(db, 'events');
+const badgesCollection = collection(db, 'badges');
+
 @Injectable({
   providedIn: 'root',
 })
@@ -35,15 +51,11 @@ export class FirebaseService {
   constructor() {}
 
   getUsers() {
-    /* to get data use below
-    firebase.getUsers().then((snap) => {
-      snap.docChanges().forEach(data=>{
-        console.log(data.doc.id);
-        console.log(data.doc.data());
-      });
-    });
-    */
-    return getDocs(collection(db, 'users'));
+    return getDocs(usersCollection);
+  }
+
+  getUserByID(userID: string) {
+    return getDoc(doc(db, 'users', userID));
   }
 
   doLogin(email: string, password: string) {
@@ -82,7 +94,93 @@ export class FirebaseService {
     signInWithRedirect(this.auth, twitterProvider);
   }
 
-  getEvents(){
-    return getDocs(collection(db,'events'));
+  getEvents() {
+    return getDocs(eventsCollection);
+  }
+
+  checkUserExists(emailInput: string) {
+    const usersByEmailQuery = query(
+      usersCollection,
+      where('email', '==', emailInput)
+    );
+    return getDocs(usersByEmailQuery);
+  }
+
+  createNewUser(
+    emailInput: string,
+    photoURLInput: string,
+    docID: string,
+    displayNameInput: string,
+    phoneNumberInput: string
+  ) {
+    this.checkUserExists(emailInput).then((snap) => {
+      if (snap.empty) {
+        setDoc(doc(db, 'users', docID), {
+          badges: [],
+          email: emailInput,
+          displayName: displayNameInput,
+          phoneNumber: phoneNumberInput,
+          events: [],
+          photoURL: photoURLInput,
+          registrations: [],
+          role: 'volunteer',
+        });
+      } else {
+        throw new Error(
+          'The user with email: ' + emailInput + ' already exists!'
+        );
+      }
+    });
+  }
+
+  getRole(emailInput: string) {
+    const usersByEmailQuery = query(
+      usersCollection,
+      where('email', '==', emailInput)
+    );
+    return getDocs(usersByEmailQuery);
+  }
+
+  createEvent(eventInput: Event) {
+    const datesInput = new Array();
+    eventInput.dates.forEach((data) => {
+      datesInput.push({
+        date: data.date,
+        description: data.description,
+        icon: data.icon,
+        link: data.link,
+      });
+    });
+
+    return addDoc(eventsCollection, {
+      ageGroup: eventInput.ageGroup,
+      beneficiaries: eventInput.beneficiaries,
+      dates: datesInput,
+      description: eventInput.description,
+      isCompleted: false,
+      isVirtual: eventInput.isVirtual,
+      isPhysical: eventInput.isPhysical,
+      location: new GeoPoint(
+        parseFloat(eventInput.location.lat),
+        parseFloat(eventInput.location.long)
+      ),
+      name: eventInput.name,
+      ngoName: eventInput.ngoName,
+      photo: eventInput.photo,
+      preferredLanguages: eventInput.preferredLanguages,
+      sessions: eventInput.sessions,
+    });
+  }
+  deleteEvent(eventID: string) {
+    return deleteDoc(doc(db, 'events', eventID));
+  }
+  getBadgeByID(badgeID: string) {
+    return getDoc(doc(db, 'badges', badgeID));
+  }
+  getEventByID(eventID: string) {
+    return getDoc(doc(db, 'events', eventID));
+  }
+  deleteUser(userID: string) {
+    return deleteDoc(doc(db,'users',userID));
   }
 }

@@ -31,6 +31,30 @@ const routes: Routes = [
         ],
       },
       {
+        path: 'manage-events',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../manage-events/manage-events.module').then(
+                (m) => m.ManageEventsPageModule
+              ),
+          },
+        ],
+      },
+      {
+        path: 'manage-people',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../manage-people/manage-people.module').then(
+                (m) => m.ManagePeoplePageModule
+              ),
+          },
+        ],
+      },
+      {
         path: 'social',
         children: [
           {
@@ -52,7 +76,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/home',
+        redirectTo: '/home/explore',
         pathMatch: 'full',
       },
     ],

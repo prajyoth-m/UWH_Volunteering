@@ -1,16 +1,16 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>
-      Welcome {{currentUser.displayName}}
-    </ion-title>
+    <ion-avatar
+      slot="start"
+      style="margin-left: 1rem; height: 42px; width: 42px"
+    >
+      <img [src]="currentUser.photoURL" />
+    </ion-avatar>
+    <ion-title> Welcome {{currentUser.displayName}} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
   <ion-tabs>
     <ion-tab-bar slot="bottom">
       <ion-tab-button tab="explore">
@@ -18,23 +18,39 @@
         <ion-label>Explore</ion-label>
       </ion-tab-button>
 
-      <ion-tab-button tab="schedule">
+      <ion-tab-button tab="schedule" *ngIf="userRole==='volunteer'">
         <ion-icon name="calendar"></ion-icon>
         <ion-label>Regestered Events</ion-label>
-        <ion-badge>6</ion-badge>
+        <ion-badge>{{registeredEvents}}</ion-badge>
       </ion-tab-button>
 
-      <ion-tab-button tab="social">
-        <ion-icon name="people-outline"></ion-icon>
-        <ion-label>Socialize</ion-label>
+      <ion-tab-button
+        tab="manage-events"
+        *ngIf="userRole==='admin' || userRole==='manager'"
+      >
+        <ion-icon name="calendar"></ion-icon>
+        <ion-label>Manage Events</ion-label>
       </ion-tab-button>
+
+      <ion-tab-button tab="social" *ngIf="userRole==='volunteer';else manage">
+        <ion-icon name="people-outline"></ion-icon>
+        <ion-label>
+          <ion-label>Socialize</ion-label>
+        </ion-label>
+      </ion-tab-button>
+      <ng-template #manage>
+        <ion-tab-button tab="manage-people">
+          <ion-icon name="people-outline"></ion-icon>
+          <ion-label>
+            <ion-label>Manage People</ion-label>
+          </ion-label>
+        </ion-tab-button>
+      </ng-template>
 
       <ion-tab-button tab="about">
         <ion-icon name="information-circle"></ion-icon>
         <ion-label>About Us</ion-label>
       </ion-tab-button>
-
     </ion-tab-bar>
   </ion-tabs>
-
 </ion-content>

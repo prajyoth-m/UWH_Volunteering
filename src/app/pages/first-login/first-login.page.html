@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title></ion-title>
+    <ion-title> Details </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,7 +13,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-grid style="width: 75%">
-        <ion-col *ngIf="currentUser.displayName===null">
+        <ion-col>
           <ion-item fill="outline" mode="md">
             <ion-label position="floating">Display Name</ion-label>
             <ion-input
@@ -26,7 +26,7 @@
             ></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col *ngIf="currentUser.phoneNumber===null">
+        <ion-col>
           <ion-item fill="outline" mode="md">
             <ion-label position="floating">Phone Number</ion-label>
             <ion-input
@@ -39,32 +39,30 @@
             ></ion-input>
           </ion-item>
         </ion-col>
-        <ion-row>
-          <ion-col>
-            <ion-item fill="outline" mode="md">
-              <ion-label position="floating">Password</ion-label>
-              <ion-input
-                type="text"
-                autocomplete="off"
-                autocorrect="off"
-                required
-                [(ngModel)]="password"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col>
-            <ion-item fill="outline" mode="md">
-              <ion-label position="floating">Confirm Password</ion-label>
-              <ion-input
-                type="text"
-                autocomplete="off"
-                autocorrect="off"
-                required
-                [(ngModel)]="confirmPass"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+        <ion-col>
+          <ion-item fill="outline" mode="md">
+            <ion-label position="floating">Photo URL</ion-label>
+            <ion-input
+              type="text"
+              autocomplete="off"
+              autocorrect="off"
+              required
+              [(ngModel)]="photo"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item fill="outline" mode="md">
+            <ion-label position="floating">Email</ion-label>
+            <ion-input
+              type="text"
+              autocomplete="off"
+              autocorrect="off"
+              required
+              [(ngModel)]="email"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
         <ion-col>
           <div id="recaptcha-container"></div>
         </ion-col>

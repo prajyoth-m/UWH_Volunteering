@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Session</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-col>
+      <ion-item>
+        <ion-label>Date</ion-label>
+        <ion-datetime
+          displayFormat="DD-MMM-YYYY hh:mm:ss A"
+          pickerFormat="DD-MMM-YY HH:mm"
+          [(ngModel)]="date"
+        ></ion-datetime>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">Icon</ion-label>
+        <ion-input
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="icon"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">Description</ion-label>
+        <ion-input
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="desc"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">Link to the Session</ion-label>
+        <ion-input
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="link"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-button expand="full" color="primary" (click)="submit()">Submit</ion-button>
+  </ion-grid>
+</ion-content>

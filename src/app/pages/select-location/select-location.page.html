@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>select-location</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid style="width: 85%;">
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">Latitude</ion-label>
+        <ion-input
+          type="number"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="location.lat"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item fill="outline" mode="md">
+        <ion-label position="floating">Longitude</ion-label>
+        <ion-input
+          type="number"
+          autocomplete="off"
+          autocorrect="off"
+          required
+          [(ngModel)]="location.long"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-button color="primary" (click)="closeModal()" expand="full">Submit</ion-button>
+  </ion-grid>
+
+</ion-content>
