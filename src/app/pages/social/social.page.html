@@ -5,5 +5,119 @@
 </ion-header>
 
 <ion-content>
-
+  <ion-list>
+    <ion-item *ngIf="!editName">
+      <ion-icon name="person-circle" slot="start"></ion-icon>
+      <ion-label >{{userData.displayName}}</ion-label>
+      <ion-icon
+        name="pencil"
+        slot="end"
+        (click)="editName=true"
+        *ngIf="!editName"
+      ></ion-icon>
+    </ion-item>
+    <ion-item fill="outline" mode="md" *ngIf="editName">
+      <ion-label position="floating">Display Name</ion-label>
+      <ion-input
+        type="text"
+        inputmode="email"
+        autocomplete="off"
+        autocorrect="off"
+        required
+        [(ngModel)]="nameinput"
+      ></ion-input>
+      <ion-icon
+        name="checkmark"
+        color="success"
+        slot="end"
+        (click)="changeName()"
+        *ngIf="editName"
+      ></ion-icon>
+      <ion-icon
+        name="backspace"
+        color="danger"
+        slot="end"
+        (click)="editName=false"
+        *ngIf="editName"
+      ></ion-icon>
+    </ion-item>
+    <ion-item *ngIf="!editEmail">
+      <ion-icon name="mail" slot="start"></ion-icon>
+      <ion-label >{{userData.email}}</ion-label>
+      <ion-icon
+        name="pencil"
+        slot="end"
+        (click)="editEmail=true"
+        *ngIf="!editEmail"
+      ></ion-icon>
+    </ion-item>
+    <ion-item fill="outline" mode="md" *ngIf="editEmail">
+      <ion-label position="floating">Email</ion-label>
+      <ion-input
+        type="text"
+        inputmode="email"
+        autocomplete="off"
+        autocorrect="off"
+        required
+        [(ngModel)]="emailInput"
+      ></ion-input>
+      <ion-icon
+        name="checkmark"
+        color="success"
+        slot="end"
+        (click)="editEmail=false"
+        *ngIf="editEmail"
+      ></ion-icon>
+      <ion-icon
+        name="backspace"
+        color="danger"
+        slot="end"
+        (click)="editEmail=false"
+        *ngIf="editEmail"
+      ></ion-icon>
+    </ion-item>
+    <ion-item *ngIf="!editPhone">
+      <ion-icon name="call" slot="start"></ion-icon>
+      <ion-label >{{userData.phoneNumber}}</ion-label>
+      <ion-icon
+        name="pencil"
+        slot="end"
+        (click)="editPhone=true"
+        *ngIf="!editPhone"
+      ></ion-icon>
+    </ion-item>
+    <ion-item fill="outline" mode="md" *ngIf="editPhone">
+      <ion-label position="floating">Phone Number</ion-label>
+      <ion-input
+        type="text"
+        inputmode="email"
+        autocomplete="off"
+        autocorrect="off"
+        required
+        [(ngModel)]="phoneInput"
+      ></ion-input>
+      <ion-icon
+        name="checkmark"
+        color="success"
+        slot="end"
+        (click)="editPhone=false"
+        *ngIf="editPhone"
+      ></ion-icon>
+      <ion-icon
+        name="backspace"
+        color="danger"
+        slot="end"
+        (click)="editPhone=false"
+        *ngIf="editPhone"
+      ></ion-icon>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="trending-up" slot="start"></ion-icon>
+      <ion-label>{{userData.events.length}} Contributions</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="ribbon" slot="start"></ion-icon>
+      <ion-label>badges TODO</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

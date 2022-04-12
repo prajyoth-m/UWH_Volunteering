@@ -12,28 +12,49 @@ import { ContributeModalPage } from '../contribute-modal/contribute-modal.page';
 export class ExplorePage implements OnInit {
   events: Array<Event>;
   modal: HTMLElement;
+  registeredEvents: Array<string>;
   constructor(
     private firebase: FirebaseService,
     private modalController: ModalController
   ) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ionViewWillEnter() {
+    this.refresh();
+  }
+
+  refresh() {
     this.events = new Array();
-    this.firebase.getEvents().then((snap) => {
-      snap.forEach((doc) => {
-        const event = new Event();
-        event.id = doc.id;
-        Object.assign(event,doc.data());
-        this.events.push(event);
+    this.registeredEvents = new Array();
+    this.firebase
+      .getUserByID(this.firebase.auth.currentUser.uid)
+      .then((snap) => {
+        this.registeredEvents.push(snap.data().events);
+      })
+      .then((res) => {
+        this.firebase.getEvents().then((snap) => {
+          snap.forEach((doc) => {
+            const event = new Event();
+            event.id = doc.id;
+            // eslint-disable-next-line eqeqeq
+            if (!this.registeredEvents.find(el=>el==doc.id)) {
+              Object.assign(event, doc.data());
+              this.events.push(event);
+            }
+          });
+        });
       });
-    });
   }
 
   async presentModal(event) {
     const modal = await this.modalController.create({
       component: ContributeModalPage,
       cssClass: 'contribute-modal',
-      componentProps: { controller: this.modalController, contributeEvent: event },
+      componentProps: {
+        controller: this.modalController,
+        contributeEvent: event,
+      },
       breakpoints: [0, 0.2, 0.5, 1],
       initialBreakpoint: 0.2,
     });
