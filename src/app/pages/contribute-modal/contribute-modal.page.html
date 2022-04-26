@@ -9,9 +9,30 @@
 
 <ion-content>
   <ion-card style="margin-top: 1rem">
-    <ion-card-title style="padding-left: 1rem;padding-right: 1rem;">
-      Provide the below details to contribute your efforts towards the Event:
+    <img [src]="contributeEvent.photo" />
+    <ion-card-title style="padding-left: 1rem; padding-right: 1rem">
       {{contributeEvent.name}}
     </ion-card-title>
+    <ion-card-subtitle>{{contributeEvent.description}}</ion-card-subtitle>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let session of contributeEvent.dates">
+          <ion-icon name="{{session.icon}}" slot="start"></ion-icon>
+          <ul>
+            <li>{{session.description}}</li>
+            <li>
+              {{session.date.toDate() | date:'dd-MMM-yyyy hh:mm'}}
+              <ion-button (click)="addSession(session)" color="primary" *ngIf="!sessions.sessions.includes(session)">
+                <ion-icon name="add"></ion-icon>
+              </ion-button>
+              <ion-button (click)="removeSession(session)" color="danger" *ngIf="sessions.sessions.includes(session)">
+                <ion-icon name="remove"></ion-icon>
+              </ion-button>
+            </li>
+          </ul>
+        </ion-item>
+      </ion-list>
+      <ion-button (click)="submit()" expand="full">Submit</ion-button>
+    </ion-card-content>
   </ion-card>
 </ion-content>

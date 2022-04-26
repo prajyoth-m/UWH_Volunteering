@@ -59,6 +59,10 @@ const routes: Routes = [
     path: 'manage-people',
     loadChildren: () => import('./pages/manage-people/manage-people.module').then( m => m.ManagePeoplePageModule)
   },
+  {
+    path: 'exit-event',
+    loadChildren: () => import('./pages/exit-event/exit-event.module').then( m => m.ExitEventPageModule)
+  },
 ];
 
 @NgModule({

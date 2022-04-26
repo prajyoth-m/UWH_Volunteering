@@ -12,6 +12,7 @@ import {
   doc,
   deleteDoc,
   getDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { environment } from './firebaseConfig';
 import {
@@ -27,6 +28,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { Event } from '../models/event';
+import { Session } from '../models/session';
 
 // Initialize Firebase
 const app = initializeApp(environment.firebaseConfig);
@@ -181,6 +183,21 @@ export class FirebaseService {
     return getDoc(doc(db, 'events', eventID));
   }
   deleteUser(userID: string) {
-    return deleteDoc(doc(db,'users',userID));
+    return deleteDoc(doc(db, 'users', userID));
+  }
+  updateUserEvents(eventsIn: Session, userID: string) {
+    this.getUserByID(userID).then(snap => {
+      const existingSessions = snap.data().events;
+      const finalEvents = new Array();
+      existingSessions.forEach(session=>{
+        const event = { id: session.id, name: session.name , sessions: [...session.sessions] };
+        finalEvents.push(event);
+      });
+      finalEvents.push({ id: eventsIn.id, name: eventsIn.name , sessions: [...eventsIn.sessions] });
+      updateDoc(doc(db, 'users', userID), {
+        events: finalEvents,
+      });
+    });
+
   }
 }
