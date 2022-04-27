@@ -29,6 +29,7 @@ export class HomePage implements OnInit {
   }
 
   refresh() {
+    this.registeredEvents = 0;
     this.firebase
       .checkUserExists(this.firebase.auth.currentUser.email)
       .then((snap) => {
@@ -44,7 +45,9 @@ export class HomePage implements OnInit {
     this.firebase
       .getUserByID(this.firebase.auth.currentUser.uid)
       .then((snap) => {
-        this.registeredEvents = snap.data().events.length;
+        snap.data().events.forEach((evnt) => {
+          this.registeredEvents += evnt.sessions.length;
+        });
       });
   }
 

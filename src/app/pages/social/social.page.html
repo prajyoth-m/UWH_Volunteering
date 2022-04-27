@@ -8,7 +8,7 @@
   <ion-list>
     <ion-item *ngIf="!editName">
       <ion-icon name="person-circle" slot="start"></ion-icon>
-      <ion-label >{{userData.displayName}}</ion-label>
+      <ion-label>{{userData.displayName}}</ion-label>
       <ion-icon
         name="pencil"
         slot="end"
@@ -43,7 +43,7 @@
     </ion-item>
     <ion-item *ngIf="!editEmail">
       <ion-icon name="mail" slot="start"></ion-icon>
-      <ion-label >{{userData.email}}</ion-label>
+      <ion-label>{{userData.email}}</ion-label>
       <ion-icon
         name="pencil"
         slot="end"
@@ -65,7 +65,7 @@
         name="checkmark"
         color="success"
         slot="end"
-        (click)="editEmail=false"
+        (click)="changeEmail()"
         *ngIf="editEmail"
       ></ion-icon>
       <ion-icon
@@ -78,7 +78,7 @@
     </ion-item>
     <ion-item *ngIf="!editPhone">
       <ion-icon name="call" slot="start"></ion-icon>
-      <ion-label >{{userData.phoneNumber}}</ion-label>
+      <ion-label>{{userData.phoneNumber}}</ion-label>
       <ion-icon
         name="pencil"
         slot="end"
@@ -100,7 +100,7 @@
         name="checkmark"
         color="success"
         slot="end"
-        (click)="editPhone=false"
+        (click)="changePhone()"
         *ngIf="editPhone"
       ></ion-icon>
       <ion-icon
@@ -120,4 +120,5 @@
       <ion-label>badges TODO</ion-label>
     </ion-item>
   </ion-list>
+  <div id="recaptcha-container"></div>
 </ion-content>

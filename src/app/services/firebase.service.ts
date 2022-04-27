@@ -23,6 +23,7 @@ import {
   signInWithEmailAndPassword,
   signInWithRedirect,
   TwitterAuthProvider,
+  updateEmail,
   updatePassword,
   updatePhoneNumber,
   updateProfile,
@@ -69,14 +70,26 @@ export class FirebaseService {
   }
 
   updateUserProfile(displayNameInput: string, photo: string) {
-    return updateProfile(this.auth.currentUser, {
-      displayName: displayNameInput,
-      photoURL: photo,
-    });
+    let payload = {};
+    if (photo) {
+      payload = {
+        displayName: displayNameInput,
+        photoURL: photo,
+      };
+    } else {
+      payload = {
+        displayName: displayNameInput,
+      };
+    }
+    return updateProfile(this.auth.currentUser, payload);
   }
 
   updateUserPassword(password: string) {
     return updatePassword(this.auth.currentUser, password);
+  }
+
+  updateUserEmail(emailInput: string) {
+    return updateEmail(this.auth.currentUser, emailInput);
   }
 
   doGoogleLogin() {
@@ -186,18 +199,25 @@ export class FirebaseService {
     return deleteDoc(doc(db, 'users', userID));
   }
   updateUserEvents(eventsIn: Session, userID: string) {
-    this.getUserByID(userID).then(snap => {
+    this.getUserByID(userID).then((snap) => {
       const existingSessions = snap.data().events;
       const finalEvents = new Array();
-      existingSessions.forEach(session=>{
-        const event = { id: session.id, name: session.name , sessions: [...session.sessions] };
+      existingSessions.forEach((session) => {
+        const event = {
+          id: session.id,
+          name: session.name,
+          sessions: [...session.sessions],
+        };
         finalEvents.push(event);
       });
-      finalEvents.push({ id: eventsIn.id, name: eventsIn.name , sessions: [...eventsIn.sessions] });
+      finalEvents.push({
+        id: eventsIn.id,
+        name: eventsIn.name,
+        sessions: [...eventsIn.sessions],
+      });
       updateDoc(doc(db, 'users', userID), {
         events: finalEvents,
       });
     });
-
   }
 }
