@@ -13,7 +13,7 @@
     <ion-card-title style="padding-left: 1rem; padding-right: 1rem">
       {{contributeEvent.name}}
     </ion-card-title>
-    <ion-card-subtitle>{{contributeEvent.description}}</ion-card-subtitle>
+    <ion-card-subtitle style="padding-left: 1rem; padding-right: 1rem">{{contributeEvent.description}}</ion-card-subtitle>
     <ion-card-content>
       <ion-list>
         <ion-item *ngFor="let session of contributeEvent.dates">
@@ -21,7 +21,7 @@
           <ul>
             <li>{{session.description}}</li>
             <li>
-              {{session.date.toDate() | date:'dd-MMM-yyyy hh:mm'}}
+              {{session.date.toDate() | date:'dd-MMM-yyyy hh:mm a'}}
               <ion-button (click)="addSession(session)" color="primary" *ngIf="!sessions.sessions.includes(session)">
                 <ion-icon name="add"></ion-icon>
               </ion-button>

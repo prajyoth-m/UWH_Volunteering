@@ -35,7 +35,7 @@ export class ManagePeoplePage implements OnInit {
         });
         user.events = new Array();
         userData.events.forEach((event) => {
-          this.firebase.getEventByID(event).then((eventSnap) => {
+          this.firebase.getEventByID(event.id).then((eventSnap) => {
             const newEvent = new Event();
             Object.assign(newEvent, eventSnap.data());
             user.events.push(newEvent);

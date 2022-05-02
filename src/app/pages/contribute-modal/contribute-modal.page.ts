@@ -23,17 +23,37 @@ export class ContributeModalPage implements OnInit {
   ngOnInit() {
     this.sessions.id = this.contributeEvent.id;
     this.sessions.name = this.contributeEvent.name;
+    this.sessions.sessions = Array();
+    this.contributeEvent.dates.forEach((date) => {
+      if (date.isRegistered) {
+        this.sessions.sessions.push(date);
+      }
+    });
   }
   dismissModal() {
     this.controller.dismiss();
   }
   addSession(eventDate: EventDate) {
+    console.log(this.getAllUserSessions());
     this.sessions.sessions.push(eventDate);
+  }
+  getAllUserSessions() {
+    return this.firebase
+      .getUserByID(this.firebase.auth.currentUser.uid)
+      .then((snap) => {
+        const data = snap.data();
+        return data.events.map((event) => {
+          const session = new EventDate();
+          Object.assign(session, event.sessions);
+          return session;
+        });
+      });
   }
   removeSession(eventDate: EventDate) {
     this.sessions.sessions = this.sessions.sessions.filter(
       (e) => e.date !== eventDate.date
     );
+    console.log(this.sessions.sessions);
   }
   submit() {
     this.firebase.updateUserEvents(

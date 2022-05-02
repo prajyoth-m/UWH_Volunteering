@@ -5,6 +5,7 @@ export class EventDate {
   description: string;
   icon: string;
   link: string;
+  isRegistered: boolean; //only UI field not commit to BE
 
   public get getDate(): Timestamp {
     return this.date;

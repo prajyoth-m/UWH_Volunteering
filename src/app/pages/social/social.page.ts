@@ -51,11 +51,9 @@ export class SocialPage implements OnInit {
   }
   changeEmail() {
     this.editEmail = false;
-    console.log('change triggered ' + this.emailInput);
     this.firebase
       .updateUserEmail(this.emailInput)
       .then((snap) => {
-        console.log(snap);
       })
       .catch(async (err) => {
         console.log(err.code);
@@ -88,7 +86,6 @@ export class SocialPage implements OnInit {
               role: 'cancel',
               cssClass: 'secondary',
               handler: () => {
-                console.log('Confirm Cancel');
               },
             },
             {

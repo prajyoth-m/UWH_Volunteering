@@ -76,4 +76,8 @@ export class LoginPage implements OnInit {
   async presentLoading() {
     await this.loading.present();
   }
+
+  createAccount(){
+  this.router.navigateByUrl('/create-user');
+  }
 }

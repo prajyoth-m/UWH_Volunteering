@@ -138,6 +138,7 @@ export class FirebaseService {
           events: [],
           photoURL: photoURLInput,
           registrations: [],
+          isVerified: false,
           role: 'volunteer',
         });
       } else {
@@ -166,25 +167,44 @@ export class FirebaseService {
         link: data.link,
       });
     });
+    let payload = {};
+    if (eventInput.isPhysical) {
+      payload = {
+        ageGroup: eventInput.ageGroup,
+        beneficiaries: eventInput.beneficiaries,
+        dates: datesInput,
+        description: eventInput.description,
+        isCompleted: false,
+        isVirtual: eventInput.isVirtual,
+        isPhysical: true,
+        location: new GeoPoint(
+          parseFloat(eventInput.location.lat),
+          parseFloat(eventInput.location.long)
+        ),
+        name: eventInput.name,
+        ngoName: eventInput.ngoName,
+        photo: eventInput.photo,
+        preferredLanguages: eventInput.preferredLanguages,
+        sessions: eventInput.sessions,
+      };
+    } else {
+      payload = {
+        ageGroup: eventInput.ageGroup,
+        beneficiaries: eventInput.beneficiaries,
+        dates: datesInput,
+        description: eventInput.description,
+        isCompleted: false,
+        isVirtual: eventInput.isVirtual,
+        isPhysical: false,
+        name: eventInput.name,
+        ngoName: eventInput.ngoName,
+        photo: eventInput.photo,
+        preferredLanguages: eventInput.preferredLanguages,
+        sessions: eventInput.sessions,
+      };
+    }
 
-    return addDoc(eventsCollection, {
-      ageGroup: eventInput.ageGroup,
-      beneficiaries: eventInput.beneficiaries,
-      dates: datesInput,
-      description: eventInput.description,
-      isCompleted: false,
-      isVirtual: eventInput.isVirtual,
-      isPhysical: eventInput.isPhysical,
-      location: new GeoPoint(
-        parseFloat(eventInput.location.lat),
-        parseFloat(eventInput.location.long)
-      ),
-      name: eventInput.name,
-      ngoName: eventInput.ngoName,
-      photo: eventInput.photo,
-      preferredLanguages: eventInput.preferredLanguages,
-      sessions: eventInput.sessions,
-    });
+    return addDoc(eventsCollection, payload);
   }
   deleteEvent(eventID: string) {
     return deleteDoc(doc(db, 'events', eventID));

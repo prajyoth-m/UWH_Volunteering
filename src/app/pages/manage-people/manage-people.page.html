@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-grid>
-    <ion-card *ngFor="let user of users" class="people">
+    <ion-card *ngFor="let user of users" class="people" style="min-width: 330px;">
       <ion-accordion-group>
         <ion-accordion value="details">
           <ion-item slot="header">
@@ -29,20 +29,12 @@
           <ion-list slot="content">
             <ion-item style="align-items: center;">
               <ion-button
-                expand="block"
-                *ngIf="role==='admin' || role==='manager'"
-                style="margin-inline-start: 12px"
-                size="deafult"
-              >
-                Edit
-                <ion-icon name="create"></ion-icon>
-              </ion-button>
-              <ion-button
-                expand="block"
+                expand="full"
                 color="danger"
                 *ngIf="role==='admin'"
                 style="margin-inline-start: 12px"
                 size="deafult"
+                slot="end"
                 (click)="deleteUser(user.id)"
               >
                 Delete

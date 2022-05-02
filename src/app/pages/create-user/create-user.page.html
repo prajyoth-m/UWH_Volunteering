@@ -1,0 +1,109 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Sign Up</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="redirectLogin()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <div style="position: relative">
+      <img [src]="photoURL" />
+      <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">
+        <ion-fab-button (click)="addPhoto()" color="light">
+          <ion-icon name="camera"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </div>
+
+    <ion-card-header>
+      <ion-card-title>Welcome!</ion-card-title>
+      <ion-card-subtitle>
+        Enter the below details to get started, there will be a review process
+        after which you can start contributing for the cause.
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item fill="outline" mode="md" class="pb-1">
+          <ion-icon name="person" color="dark" slot="start"></ion-icon>
+          <ion-label position="floating">Display Name</ion-label>
+          <ion-input type="text"></ion-input>
+        </ion-item>
+        <ion-item fill="outline" mode="md" class="pb-1">
+          <ion-icon name="mail" color="dark" slot="start"></ion-icon>
+          <ion-label position="floating">Email ID</ion-label>
+          <ion-input type="text"></ion-input>
+        </ion-item>
+        <ion-item fill="outline" mode="md" class="pb-1">
+          <ion-icon name="call" color="dark" slot="start"></ion-icon>
+          <ion-label position="floating">Phone Number</ion-label>
+          <ion-input type="number"></ion-input>
+        </ion-item>
+        <ion-item fill="outline" mode="md" class="pb-1">
+          <ion-icon
+            name="eye-off"
+            color="dark"
+            slot="end"
+            (click)="visiblep=true"
+            *ngIf="!visiblep; else showPWD"
+          ></ion-icon>
+          <ng-template #showPWD>
+            <ion-icon
+              name="eye"
+              color="dark"
+              slot="end"
+              (click)="visiblep=false"
+            ></ion-icon>
+          </ng-template>
+          <ion-label position="floating">Password</ion-label>
+          <ion-input [type]="visiblep?'text':'password'"></ion-input>
+        </ion-item>
+        <ion-item fill="outline" mode="md" class="pb-1">
+          <ion-icon
+            name="eye-off"
+            color="dark"
+            slot="end"
+            (click)="visiblecp=true"
+            *ngIf="!visiblecp; else showCPWD"
+          ></ion-icon>
+          <ng-template #showCPWD>
+            <ion-icon
+              name="eye"
+              color="dark"
+              slot="end"
+              (click)="visiblecp=false"
+            ></ion-icon>
+          </ng-template>
+          <ion-label position="floating">Confirm Password</ion-label>
+          <ion-input [type]="visiblecp?'text':'password'"></ion-input>
+        </ion-item>
+        <p>Link any of the below social accounts for easier logins.</p>
+        <ion-item>
+          <div class="social-icons">
+            <ion-button fill="clear" (click)="googleLink()">
+              <ion-icon slot="icon-only" color="primary" name="logo-google">
+              </ion-icon>
+              <ion-badge color="success" style="border-radius: 100%;" *ngIf="googleLinked">&#10003;</ion-badge>
+            </ion-button>
+            <ion-button fill="clear" (click)="facebookLink()">
+              <ion-icon slot="icon-only" color="primary" name="logo-facebook">
+              </ion-icon>
+              <ion-badge color="success" style="border-radius: 100%;" *ngIf="facebookLinked">&#10003;</ion-badge>
+            </ion-button>
+            <ion-button fill="clear" (click)="twitterLink()">
+              <ion-icon slot="icon-only" color="primary" name="logo-twitter">
+              </ion-icon>
+              <ion-badge color="success" style="border-radius: 100%;" *ngIf="twitterLinked">&#10003;</ion-badge>
+            </ion-button>
+          </div>
+        </ion-item>
+      </ion-list>
+      <ion-button expand="full" (click)="registerUser()">Register</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -63,6 +63,10 @@ const routes: Routes = [
     path: 'exit-event',
     loadChildren: () => import('./pages/exit-event/exit-event.module').then( m => m.ExitEventPageModule)
   },
+  {
+    path: 'create-user',
+    loadChildren: () => import('./pages/create-user/create-user.module').then( m => m.CreateUserPageModule)
+  },
 ];
 
 @NgModule({
