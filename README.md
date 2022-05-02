@@ -8,4 +8,4 @@ Demo: https://uwh-volunteering.web.app/
 2. Checkout to `main` branch.
 3. Run `npm i` command.
 4. Run `ionic serve` command.
-5. The console will show the port at which the application will be served.
+5. The console will show the port at which the application is being served.
