@@ -37,7 +37,7 @@
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content> {{event.description}} </ion-card-content>
-      <ion-accordion-group *ngIf="event.sessions">
+      <ion-accordion-group *ngIf="event.sessions!=='0'">
         <ion-accordion value="sessions">
           <ion-item slot="header">
             <ion-label>Registered Sessions</ion-label>
@@ -60,7 +60,7 @@
                 <ion-item-options>
                   <ion-item-option
                     color="danger"
-                    (click)="removeSession(session,event.id)"
+                    (click)="removeSession(session,event.id,event.name)"
                   >
                     Remove
                   </ion-item-option>

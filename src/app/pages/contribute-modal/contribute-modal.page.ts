@@ -11,7 +11,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   templateUrl: './contribute-modal.page.html',
   styleUrls: ['./contribute-modal.page.scss'],
 })
-export class ContributeModalPage implements OnInit {
+export class                                                ContributeModalPage implements OnInit {
   @Input() controller: ModalController;
   @Input() contributeEvent: Event;
   sessions: Session;
@@ -56,6 +56,7 @@ export class ContributeModalPage implements OnInit {
     console.log(this.sessions.sessions);
   }
   submit() {
+    console.log(this.sessions);
     this.firebase.updateUserEvents(
       this.sessions,
       this.firebase.auth.currentUser.uid

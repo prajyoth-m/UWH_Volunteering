@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import {
   createUserWithEmailAndPassword,
+  getRedirectResult,
   sendEmailVerification,
 } from 'firebase/auth';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -23,20 +24,46 @@ export class CreateUserPage implements OnInit {
   displayName: string;
   phone: string;
   password: string;
+  loading: any;
   constructor(
     private router: Router,
     private firebase: FirebaseService,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private loadingController: LoadingController
   ) {
     this.photoURL = '../../../assets/create_user.jpg';
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.loading = await this.loadingController.create({
+      cssClass: 'loader',
+      message: 'Please wait while we fetch your login details...',
+    });
+    await this.loading.present();
+    getRedirectResult(this.firebase.auth)
+      .then((data) => {
+        this.loading.dismiss();
+        const user = data.user;
+        this.navigate(user);
+      })
+      .catch((e) => {
+        this.loading.dismiss();
+        console.error(e);
+      });
+  }
+
+  navigate(user: any) {
+    if (!user.displayName || !user.phoneNumber) {
+      this.router.navigateByUrl('/first-login');
+    } else {
+      this.router.navigateByUrl('/home');
+    }
+  }
+
   redirectLogin() {
     this.router.navigateByUrl('/login');
   }
   async addPhoto() {
-    //TODO commit photo to firebase user profile
     const alert = await this.alertController.create({
       inputs: [{ name: 'photo', type: 'text', placeholder: 'Enter Photo URL' }],
       buttons: [
@@ -44,8 +71,7 @@ export class CreateUserPage implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: () => {
-          },
+          handler: () => {},
         },
         {
           text: 'Ok',
@@ -58,13 +84,13 @@ export class CreateUserPage implements OnInit {
     alert.present();
   }
   googleLink() {
-    //TODO link account with google
+    this.firebase.doGoogleLogin();
   }
   facebookLink() {
-    //TODO link account with facebook
+    this.firebase.doFacebookLogin();
   }
   twitterLink() {
-    //TODO link account with twitter
+    this.firebase.doTwitterLogin();
   }
   registerUser() {
     createUserWithEmailAndPassword(

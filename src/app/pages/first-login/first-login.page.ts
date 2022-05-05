@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { PhoneAuthProvider, RecaptchaVerifier } from 'firebase/auth';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-first-login',
@@ -15,7 +16,13 @@ export class FirstLoginPage implements OnInit {
   email: string;
   currentUser: any;
   error: boolean;
-  constructor(private firebase: FirebaseService, private router: Router) {}
+  waitForPhone: boolean;
+  verifier: RecaptchaVerifier;
+  constructor(
+    private firebase: FirebaseService,
+    private router: Router,
+    public alertController: AlertController
+  ) {}
 
   ngOnInit() {
     this.currentUser = this.firebase.auth.currentUser;
@@ -25,41 +32,90 @@ export class FirstLoginPage implements OnInit {
       : '';
     this.email = this.currentUser.email;
     this.photo = this.currentUser.photoURL;
+    this.verifier = new RecaptchaVerifier(
+      'recaptcha-container',
+      {
+        size: 'invisible',
+      },
+      this.firebase.auth
+    );
   }
 
   updateProfile() {
     if (this.phoneNumber) {
-      const verifier = new RecaptchaVerifier(
-        'recaptcha-container',
-        {
-          size: 'invisible',
-        },
-        this.firebase.auth
-      );
+      this.waitForPhone = true;
       const phoneProvider = new PhoneAuthProvider(this.firebase.auth);
       phoneProvider
-        .verifyPhoneNumber('+91' + this.phoneNumber, verifier)
-        .then((res) => {
+        .verifyPhoneNumber('+91' + this.phoneNumber, this.verifier)
+        .then(async (res) => {
           this.error = false;
-          const code = window.prompt('Enter the OTP');
-          const cred = PhoneAuthProvider.credential(res, code);
-          this.firebase.updateUserPhoneNumber(cred).then((resp) => {
-            if (!this.displayName && !this.error) {
-              this.router.navigateByUrl('/home');
-            }
+          const alert = await this.alertController.create({
+            inputs: [{ name: 'otp', type: 'number', placeholder: 'Enter OTP' }],
+            buttons: [
+              {
+                text: 'Cancel',
+                role: 'cancel',
+                cssClass: 'secondary',
+                handler: () => {},
+              },
+              {
+                text: 'Ok',
+                handler: (alertData) => {
+                  const cred = PhoneAuthProvider.credential(res, alertData.otp);
+                  this.firebase
+                    .updateUserPhoneNumber(cred)
+                    .then(() => {
+                      console.log('successfully updated');
+                      if (!this.displayName && !this.error) {
+                        this.waitForPhone = false;
+                        this.verifier.clear();
+                        this.router.navigateByUrl('/home');
+                      }
+                    })
+                    .catch(async (err) => {
+                      this.verifier.clear();
+                      let errMsg = '';
+                      switch (err.code) {
+                        case 'auth/account-exists-with-different-credential':
+                          errMsg =
+                            'An account already exists with the provided phone number.';
+                          break;
+
+                        default:
+                          errMsg =
+                            'Updating mobile number failed with error code: ' +
+                            err.code;
+                          break;
+                      }
+                      const errAlert = await this.alertController.create({
+                        cssClass: 'my-custom-class',
+                        header: 'Error occured while updating!',
+                        message: errMsg,
+                        buttons: ['OK'],
+                      });
+                      await errAlert.present();
+                    });
+                },
+              },
+            ],
           });
+          alert.present();
         })
         .catch((e) => {
           console.error(e);
           this.error = true;
+          this.waitForPhone = false;
+          this.verifier.clear();
         });
     }
     if (this.displayName) {
-      this.firebase.updateUserProfile(this.displayName, this.photo).then((res) => {
-        if (!this.error) {
-          this.router.navigateByUrl('/home');
-        }
-      });
+      this.firebase
+        .updateUserProfile(this.displayName, this.photo)
+        .then((res) => {
+          if (!this.error && !this.waitForPhone) {
+            this.router.navigateByUrl('/home');
+          }
+        });
     }
     try {
       this.firebase.createNewUser(

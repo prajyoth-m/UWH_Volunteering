@@ -10,9 +10,9 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
+  <ion-card style="max-width: 600px;margin: auto">
     <div style="position: relative">
-      <img [src]="photoURL" />
+      <img [src]="photoURL" style="width: 100%;" />
       <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">
         <ion-fab-button (click)="addPhoto()" color="light">
           <ion-icon name="camera"></ion-icon>
@@ -82,7 +82,8 @@
           <ion-label position="floating">Confirm Password</ion-label>
           <ion-input [type]="visiblecp?'text':'password'"></ion-input>
         </ion-item>
-        <p>Link any of the below social accounts for easier logins.</p>
+        <p style="text-align: center;">------------ OR ------------</p>
+        <p>Sign up using any of the social media accounts below.</p>
         <ion-item>
           <div class="social-icons">
             <ion-button fill="clear" (click)="googleLink()">

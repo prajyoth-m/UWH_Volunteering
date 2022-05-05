@@ -78,10 +78,18 @@ export class ExplorePage implements OnInit {
       breakpoints: [0, 0.5, 0.75, 1],
       initialBreakpoint: 0.5,
     });
-    return await modal.present();
+    await modal.present();
+    await modal.onDidDismiss().then((res) => {
+      this.refresh();
+      // Create the event
+      const cstevnt = new CustomEvent('subscriptions');
+
+      // Dispatch/Trigger/Fire the event
+      document.dispatchEvent(cstevnt);
+    });
   }
 
-  removeSession(sessionData: EventDate, eventID: string) {
+  removeSession(sessionData: EventDate, eventID: string, eventName: string) {
     this.events.forEach((event) => {
       if (event.id === eventID) {
         event.dates.forEach((date) => {
@@ -93,6 +101,35 @@ export class ExplorePage implements OnInit {
       }
     });
 
-    //TODO commit data to firebase
+    const currSession = new Session();
+    currSession.id = eventID;
+    currSession.name = eventName;
+    currSession.sessions = new Array<EventDate>();
+    currSession.sessions.push(
+      ...this.events
+        .find((e) => e.id === eventID)
+        .dates.filter((e) => e.isRegistered)
+    );
+    if (currSession.sessions.length === 0) {
+      this.firebase
+        .removeUserEvent(eventID, this.firebase.auth.currentUser.uid)
+        .then((res) => {
+          // Create the event
+          const cstevnt = new CustomEvent('subscriptions');
+
+          // Dispatch/Trigger/Fire the event
+          document.dispatchEvent(cstevnt);
+        });
+    } else {
+      this.firebase
+        .updateUserEvents(currSession, this.firebase.auth.currentUser.uid)
+        .then((res) => {
+          // Create the event
+          const cstevnt = new CustomEvent('subscriptions');
+
+          // Dispatch/Trigger/Fire the event
+          document.dispatchEvent(cstevnt);
+        });
+    }
   }
 }

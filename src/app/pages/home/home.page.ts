@@ -22,7 +22,13 @@ export class HomePage implements OnInit {
       ? this.currentUser.photoURL
       : '../../../assets/avatar.svg';
   }
-  ngOnInit() {}
+  ngOnInit() {
+    // Add an event listener
+    document.addEventListener('subscriptions', (e) => {
+      console.log(e); // Prints "Example of an event"
+      this.refresh();
+    });
+  }
 
   ionViewWillEnter() {
     this.refresh();

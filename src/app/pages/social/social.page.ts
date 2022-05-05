@@ -92,8 +92,9 @@ export class SocialPage implements OnInit {
               text: 'Ok',
               handler: (alertData) => {
                 const cred = PhoneAuthProvider.credential(res, alertData.otp);
-                this.firebase.updateUserPhoneNumber(cred).then((res) => {
+                this.firebase.updateUserPhoneNumber(cred).then(() => {
                   console.log('successfully updated');
+                  verifier.clear();
                   this.refresh();
                 });
               },
@@ -105,6 +106,7 @@ export class SocialPage implements OnInit {
       .catch((e) => {
         console.error(e);
         this.showError(e.code);
+        verifier.clear();
       });
   }
 

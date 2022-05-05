@@ -219,23 +219,35 @@ export class FirebaseService {
     return deleteDoc(doc(db, 'users', userID));
   }
   updateUserEvents(eventsIn: Session, userID: string) {
-    this.getUserByID(userID).then((snap) => {
+    return this.getUserByID(userID).then((snap) => {
       const existingSessions = snap.data().events;
       const finalEvents = new Array();
       existingSessions.forEach((session) => {
-        const event = {
-          id: session.id,
-          name: session.name,
-          sessions: [...session.sessions],
-        };
-        finalEvents.push(event);
+        if (session.id !== eventsIn.id) {
+          const event = {
+            id: session.id,
+            name: session.name,
+            sessions: [...session.sessions],
+          };
+          finalEvents.push(event);
+        }
       });
       finalEvents.push({
         id: eventsIn.id,
         name: eventsIn.name,
         sessions: [...eventsIn.sessions],
       });
-      updateDoc(doc(db, 'users', userID), {
+      return updateDoc(doc(db, 'users', userID), {
+        events: finalEvents,
+      });
+    });
+  }
+  removeUserEvent(eventID: string, userID: string) {
+    return this.getUserByID(userID).then((snap) => {
+      const existingSessions = snap.data().events;
+      const finalEvents = new Array();
+      finalEvents.push(...existingSessions.filter((e) => e.id !== eventID));
+      return updateDoc(doc(db, 'users', userID), {
         events: finalEvents,
       });
     });
