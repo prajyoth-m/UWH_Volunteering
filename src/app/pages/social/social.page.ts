@@ -17,6 +17,8 @@ export class SocialPage implements OnInit {
   nameinput: string;
   emailInput: string;
   phoneInput: string;
+  verifier: RecaptchaVerifier;
+  userContributions: number;
   constructor(
     private firebase: FirebaseService,
     public alertController: AlertController
@@ -28,7 +30,16 @@ export class SocialPage implements OnInit {
     this.editName = false;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.userContributions = 0;
+    this.verifier = new RecaptchaVerifier(
+      'recaptcha-container',
+      {
+        size: 'invisible',
+      },
+      this.firebase.auth
+    );
+  }
   ionViewWillEnter() {
     this.refresh();
   }
@@ -40,6 +51,9 @@ export class SocialPage implements OnInit {
       .then((snap) => {
         const userRef = snap.data();
         Object.assign(this.userData, userRef);
+        this.userData.contributions.forEach((evnt) => {
+          this.userContributions += evnt.sessions ? evnt.sessions.length : 1;
+        });
       });
     this.nameinput = this.firebase.auth.currentUser.displayName;
     this.emailInput = this.firebase.auth.currentUser.email;
@@ -53,29 +67,20 @@ export class SocialPage implements OnInit {
     this.editEmail = false;
     this.firebase
       .updateUserEmail(this.emailInput)
-      .then((snap) => {
-      })
+      .then((snap) => {})
       .catch(async (err) => {
-        console.log(err.code);
         this.showError(err.code);
       });
   }
   changePhone() {
     this.editPhone = false;
-    const verifier = new RecaptchaVerifier(
-      'recaptcha-container',
-      {
-        size: 'invisible',
-      },
-      this.firebase.auth
-    );
     const phoneProvider = new PhoneAuthProvider(this.firebase.auth);
     phoneProvider
       .verifyPhoneNumber(
         this.phoneInput.substring(0, 3) === '+91'
           ? this.phoneInput
           : '+91' + this.phoneInput,
-        verifier
+        this.verifier
       )
       .then(async (res) => {
         const alert = await this.alertController.create({
@@ -85,18 +90,21 @@ export class SocialPage implements OnInit {
               text: 'Cancel',
               role: 'cancel',
               cssClass: 'secondary',
-              handler: () => {
-              },
+              handler: () => {},
             },
             {
               text: 'Ok',
               handler: (alertData) => {
                 const cred = PhoneAuthProvider.credential(res, alertData.otp);
-                this.firebase.updateUserPhoneNumber(cred).then(() => {
-                  console.log('successfully updated');
-                  verifier.clear();
-                  this.refresh();
-                });
+                this.firebase
+                  .updateUserPhoneNumber(cred)
+                  .then(() => {
+                    console.log('successfully updated');
+                    this.refresh();
+                  })
+                  .catch((err) => {
+                    this.showError(err.code);
+                  });
               },
             },
           ],
@@ -106,7 +114,6 @@ export class SocialPage implements OnInit {
       .catch((e) => {
         console.error(e);
         this.showError(e.code);
-        verifier.clear();
       });
   }
 

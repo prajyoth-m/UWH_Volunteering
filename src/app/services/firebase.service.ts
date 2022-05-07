@@ -13,6 +13,7 @@ import {
   deleteDoc,
   getDoc,
   updateDoc,
+  Timestamp,
 } from 'firebase/firestore';
 import { environment } from './firebaseConfig';
 import {
@@ -30,6 +31,7 @@ import {
 } from 'firebase/auth';
 import { Event } from '../models/event';
 import { Session } from '../models/session';
+import { User } from '../models/user';
 
 // Initialize Firebase
 const app = initializeApp(environment.firebaseConfig);
@@ -250,6 +252,24 @@ export class FirebaseService {
       return updateDoc(doc(db, 'users', userID), {
         events: finalEvents,
       });
+    });
+  }
+  updateEvent(eventID: string, modifiedData: Event) {
+    const payload = JSON.parse(JSON.stringify(modifiedData));
+    payload.dates.forEach((el) => {
+      el.date = new Timestamp(el.date.seconds, el.date.nanoseconds);
+    });
+    payload.location = new GeoPoint(
+      payload.location.latitude,
+      payload.location.longitude
+    );
+    return updateDoc(doc(db, 'events', eventID), payload);
+  }
+  updateUserRole(userID: string, roleInput: string) {
+    return this.getUserByID(userID).then((snap) => {
+      const payload = snap.data();
+      payload.role = roleInput;
+      return updateDoc(doc(db, 'users', userID), payload);
     });
   }
 }

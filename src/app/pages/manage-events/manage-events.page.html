@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let event of events" class="events">
+  <ion-card *ngFor="let event of events;let i = index" class="events">
     <div *ngIf="!event.isCompleted">
       <div style="position: relative">
         <img [src]="event.photo" />
@@ -20,11 +20,26 @@
             <ion-fab-button color="danger" (click)="deleteEvent(event.id)">
               <ion-icon name="trash"></ion-icon>
             </ion-fab-button>
-            <ion-fab-button color="light">
+            <ion-fab-button color="light" (click)="editEvent(event)">
               <ion-icon name="create"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="light" (click)="registeredPeople(event)">
+              <ion-icon name="people"></ion-icon>
             </ion-fab-button>
           </ion-fab-list>
         </ion-fab>
+        <ion-fab vertical="top" horizontal="end" slot="fixed" *ngIf="event.behindDate">
+          <ion-fab-button size="small" color="warning" [id]="'trigger-button'+i">
+            <ion-icon name="warning"> </ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+        <ion-popover [trigger]="'trigger-button'+i">
+          <ng-template>
+            <ion-content>
+              Event dates are in the past please consider revising the dates!
+            </ion-content>
+          </ng-template>
+        </ion-popover>
       </div>
       <ion-card-header>
         <ion-card-title>{{event.name}}</ion-card-title>
@@ -61,8 +76,7 @@
               <ion-icon name="{{session.icon}}" slot="start"></ion-icon>
               <ul>
                 <li>{{session.description}}</li>
-                <li>On</li>
-                <li>{{session.date.toDate()}}</li>
+                <li>{{session.date.toDate() | date:'dd-MMM-yyyy hh:mm a'}}</li>
               </ul>
             </ion-item>
           </ion-list>

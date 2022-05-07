@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Add Event</ion-title>
+    <ion-title>event-editor</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="closeModal()">Close</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content style="height: 1200px">
+<ion-content>
   <ion-grid style="width: 85%">
     <ion-col>
       <ion-item fill="outline" mode="md">
@@ -17,7 +17,7 @@
           autocomplete="off"
           autocorrect="off"
           required
-          [(ngModel)]="eventDetails.name"
+          [(ngModel)]="event.name"
         ></ion-input>
       </ion-item>
     </ion-col>
@@ -29,7 +29,7 @@
           autocomplete="off"
           autocorrect="off"
           required
-          [(ngModel)]="eventDetails.description"
+          [(ngModel)]="event.description"
         ></ion-input>
       </ion-item>
     </ion-col>
@@ -41,7 +41,7 @@
           autocomplete="off"
           autocorrect="off"
           required
-          [(ngModel)]="eventDetails.ngoName"
+          [(ngModel)]="event.ngoName"
         ></ion-input>
       </ion-item>
     </ion-col>
@@ -53,7 +53,7 @@
           autocomplete="off"
           autocorrect="off"
           required
-          [(ngModel)]="eventDetails.photo"
+          [(ngModel)]="event.photo"
         ></ion-input>
       </ion-item>
     </ion-col>
@@ -65,7 +65,7 @@
           autocomplete="off"
           autocorrect="off"
           required
-          [(ngModel)]="eventDetails.beneficiaries"
+          [(ngModel)]="event.beneficiaries"
         ></ion-input>
       </ion-item>
     </ion-col>
@@ -77,7 +77,7 @@
           autocomplete="off"
           autocorrect="off"
           required
-          [(ngModel)]="eventDetails.ageGroup"
+          [(ngModel)]="event.ageGroup"
         ></ion-input>
       </ion-item>
     </ion-col>
@@ -88,7 +88,7 @@
           <ion-checkbox
             color="primary"
             slot="start"
-            [(ngModel)]="eventDetails.isVirtual"
+            [(ngModel)]="event.isVirtual"
           ></ion-checkbox>
         </ion-item>
       </ion-col>
@@ -98,11 +98,11 @@
           <ion-checkbox
             color="primary"
             slot="start"
-            [(ngModel)]="eventDetails.isPhysical"
+            [(ngModel)]="event.isPhysical"
           ></ion-checkbox>
         </ion-item>
       </ion-col>
-      <ion-col *ngIf="eventDetails.isPhysical">
+      <ion-col *ngIf="event.isPhysical">
         <ion-button color="tertiary" expand="full" (click)="addLocationModal()">
           Add Location
         </ion-button>
@@ -127,7 +127,7 @@
       <ion-card>
         <ion-list>
           <ion-item-sliding
-            *ngFor="let session of eventDetails.dates; let i = index"
+            *ngFor="let session of event.dates; let i = index"
             #slidingItem
           >
             <ion-item>
@@ -145,6 +145,13 @@
                   name="close-circle"
                 ></ion-icon>
               </ion-item-option>
+              <ion-item-option (click)="editSession(i)">
+                <ion-icon
+                  slot="icon-only"
+                  color="light"
+                  name="pencil"
+                ></ion-icon>
+              </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
         </ion-list>
@@ -154,5 +161,7 @@
       </ion-card>
     </ion-col>
   </ion-grid>
-  <ion-button expand="full" color="primary" (click)="addEvent()">Submit</ion-button>
+  <ion-button expand="full" color="primary" (click)="commitEvent()"
+    >Submit</ion-button
+  >
 </ion-content>

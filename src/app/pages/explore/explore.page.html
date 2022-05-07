@@ -5,11 +5,40 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let event of events" class="events">
-    <div *ngIf="!event.isCompleted">
+  <ion-segment
+    (ionChange)="segmentChanged($event)"
+    color="dark"
+    value="UpcomingEvents"
+  >
+    <ion-segment-button value="UpcomingEvents">
+      <ion-label>Upcoming Events</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="CompletedEvents">
+      <ion-label>Completed Events</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <div class="warning-msg" *ngIf="!verifiedAccount">
+    <i class="fa fa-warning"></i>
+    This account is not verified, you cannot contribute to any events unless the
+    account is verified!
+    <p
+      style="cursor: pointer; width: 90px; border-bottom: 1px dashed #f00"
+      (click)="triggerEmail()"
+    >
+      Verify Profile
+    </p>
+  </div>
+  <div *ngFor="let event of events">
+    <ion-card class="events">
       <div style="position: relative">
         <img [src]="event.photo" />
-        <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">
+        <ion-fab
+          vertical="bottom"
+          horizontal="end"
+          edge
+          slot="fixed"
+          *ngIf="upcomingView && verifiedAccount && isVolunteer"
+        >
           <ion-fab-button (click)="presentModal(event)">
             <ion-icon name="add"> </ion-icon>
           </ion-fab-button>
@@ -37,10 +66,10 @@
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content> {{event.description}} </ion-card-content>
-      <ion-accordion-group *ngIf="event.sessions!=='0'">
-        <ion-accordion value="sessions">
+      <ion-accordion-group>
+        <ion-accordion value="sessions" *ngIf="event.sessions">
           <ion-item slot="header">
-            <ion-label>Registered Sessions</ion-label>
+            <ion-label>My Sessions</ion-label>
             <ion-badge slot="start" color="secondary">
               {{event.sessions}}
             </ion-badge>
@@ -59,7 +88,7 @@
                 </ion-item>
                 <ion-item-options>
                   <ion-item-option
-                    style="background-color: rgb(255, 30, 10, 0.5);"
+                    class="danger-transp"
                     (click)="removeSession(session,event.id,event.name)"
                   >
                     Remove
@@ -70,6 +99,6 @@
           </ion-list>
         </ion-accordion>
       </ion-accordion-group>
-    </div>
-  </ion-card>
+    </ion-card>
+  </div>
 </ion-content>

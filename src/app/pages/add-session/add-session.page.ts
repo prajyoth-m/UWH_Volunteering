@@ -10,6 +10,7 @@ import { EventDate } from 'src/app/models/event-date';
 })
 export class AddSessionPage implements OnInit {
   @Input() controller: ModalController;
+  @Input() sessionEdit: EventDate;
   date: string;
   icon: string;
   desc: string;
@@ -20,17 +21,23 @@ export class AddSessionPage implements OnInit {
   }
 
   ngOnInit() {
+    if (this.sessionEdit) {
+      this.date =this.sessionEdit.date.toDate().toISOString(); //DD-MMM-YY HH:mm
+      console.log(this.date);
+      this.icon = this.sessionEdit.icon;
+      this.link = this.sessionEdit.link;
+      this.desc = this.sessionEdit.description;
+    }
   }
   closeModal() {
     this.controller.dismiss(this.session);
   }
 
-  submit(){
+  submit() {
     this.session.description = this.desc;
     this.session.icon = this.icon;
     this.session.link = this.link;
     this.session.date = Timestamp.fromDate(new Date(this.date));
     this.closeModal();
   }
-
 }

@@ -10,9 +10,9 @@
 </ion-header>
 
 <ion-content>
-  <ion-card style="max-width: 600px;margin: auto">
+  <ion-card style="max-width: 600px; margin: auto">
     <div style="position: relative">
-      <img [src]="photoURL" style="width: 100%;" />
+      <img [src]="photoURL" style="width: 100%" />
       <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">
         <ion-fab-button (click)="addPhoto()" color="light">
           <ion-icon name="camera"></ion-icon>
@@ -32,19 +32,23 @@
         <ion-item fill="outline" mode="md" class="pb-1">
           <ion-icon name="person" color="dark" slot="start"></ion-icon>
           <ion-label position="floating">Display Name</ion-label>
-          <ion-input type="text"></ion-input>
+          <ion-input type="text" [(ngModel)]="displayName"></ion-input>
         </ion-item>
         <ion-item fill="outline" mode="md" class="pb-1">
           <ion-icon name="mail" color="dark" slot="start"></ion-icon>
           <ion-label position="floating">Email ID</ion-label>
-          <ion-input type="text"></ion-input>
+          <ion-input type="text" [(ngModel)]="email"></ion-input>
         </ion-item>
         <ion-item fill="outline" mode="md" class="pb-1">
           <ion-icon name="call" color="dark" slot="start"></ion-icon>
           <ion-label position="floating">Phone Number</ion-label>
-          <ion-input type="number"></ion-input>
+          <ion-input type="number" [(ngModel)]="phone"></ion-input>
         </ion-item>
-        <ion-item fill="outline" mode="md" class="pb-1">
+        <ion-item
+          fill="outline"
+          mode="md"
+          [ngClass]="{'pb-1': true,'ion-invalid': passwordMissmatch}"
+        >
           <ion-icon
             name="eye-off"
             color="dark"
@@ -61,9 +65,16 @@
             ></ion-icon>
           </ng-template>
           <ion-label position="floating">Password</ion-label>
-          <ion-input [type]="visiblep?'text':'password'"></ion-input>
+          <ion-input
+            [type]="visiblep?'text':'password'"
+            [(ngModel)]="password"
+          ></ion-input>
         </ion-item>
-        <ion-item fill="outline" mode="md" class="pb-1">
+        <ion-item
+          fill="outline"
+          mode="md"
+          [ngClass]="{'pb-1': !passwordMissmatch,'ion-invalid': passwordMissmatch}"
+        >
           <ion-icon
             name="eye-off"
             color="dark"
@@ -80,26 +91,47 @@
             ></ion-icon>
           </ng-template>
           <ion-label position="floating">Confirm Password</ion-label>
-          <ion-input [type]="visiblecp?'text':'password'"></ion-input>
+          <ion-input
+            [type]="visiblecp?'text':'password'"
+            [(ngModel)]="confirmPassword"
+          ></ion-input>
         </ion-item>
-        <p style="text-align: center;">------------ OR ------------</p>
+        <p class="pb-1" *ngIf="passwordMissmatch" style="color: Red">
+          Both passwords should match!
+        </p>
+        <p style="text-align: center">------------ OR ------------</p>
         <p>Sign up using any of the social media accounts below.</p>
         <ion-item>
           <div class="social-icons">
             <ion-button fill="clear" (click)="googleLink()">
               <ion-icon slot="icon-only" color="primary" name="logo-google">
               </ion-icon>
-              <ion-badge color="success" style="border-radius: 100%;" *ngIf="googleLinked">&#10003;</ion-badge>
+              <ion-badge
+                color="success"
+                style="border-radius: 100%"
+                *ngIf="googleLinked"
+                >&#10003;</ion-badge
+              >
             </ion-button>
             <ion-button fill="clear" (click)="facebookLink()">
               <ion-icon slot="icon-only" color="primary" name="logo-facebook">
               </ion-icon>
-              <ion-badge color="success" style="border-radius: 100%;" *ngIf="facebookLinked">&#10003;</ion-badge>
+              <ion-badge
+                color="success"
+                style="border-radius: 100%"
+                *ngIf="facebookLinked"
+                >&#10003;</ion-badge
+              >
             </ion-button>
             <ion-button fill="clear" (click)="twitterLink()">
               <ion-icon slot="icon-only" color="primary" name="logo-twitter">
               </ion-icon>
-              <ion-badge color="success" style="border-radius: 100%;" *ngIf="twitterLinked">&#10003;</ion-badge>
+              <ion-badge
+                color="success"
+                style="border-radius: 100%"
+                *ngIf="twitterLinked"
+                >&#10003;</ion-badge
+              >
             </ion-button>
           </div>
         </ion-item>
@@ -107,4 +139,5 @@
       <ion-button expand="full" (click)="registerUser()">Register</ion-button>
     </ion-card-content>
   </ion-card>
+  <div id="recaptcha-container"></div>
 </ion-content>

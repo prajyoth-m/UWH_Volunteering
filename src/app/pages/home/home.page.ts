@@ -20,12 +20,11 @@ export class HomePage implements OnInit {
     }
     this.displayPic = this.currentUser.photoURL
       ? this.currentUser.photoURL
-      : '../../../assets/avatar.svg';
+      : 'assets/avatar.svg';
   }
   ngOnInit() {
     // Add an event listener
     document.addEventListener('subscriptions', (e) => {
-      console.log(e); // Prints "Example of an event"
       this.refresh();
     });
   }

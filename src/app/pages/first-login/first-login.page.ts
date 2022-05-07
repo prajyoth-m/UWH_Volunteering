@@ -104,6 +104,7 @@ export class FirstLoginPage implements OnInit {
           console.error(e);
           this.error = true;
           this.waitForPhone = false;
+          this.router.navigateByUrl('/login');
         });
     }
     if (this.displayName) {

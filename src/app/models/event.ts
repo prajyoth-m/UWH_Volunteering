@@ -1,4 +1,5 @@
 import { EventDate } from './event-date';
+import { User } from './user';
 import { EventLocation } from './event-location';
 
 export class Event {
@@ -13,9 +14,12 @@ export class Event {
   name: string;
   ngoName: string;
   preferredLanguages: Array<string>;
+  registeredUsers: Array<User>;
   sessions: string;
   photo: string;
   isCompleted: boolean;
+  registrationCount: number;
+  behindDate: boolean;
 
   public get getID(): string {
     return this.id;
@@ -50,6 +54,9 @@ export class Event {
   public get getPreferredLanguages(): Array<string> {
     return this.preferredLanguages;
   }
+  public get getRegisteredUsers(): Array<User> {
+    return this.registeredUsers;
+  }
   public get getSessions(): string {
     return this.sessions;
   }
@@ -71,6 +78,9 @@ export class Event {
   }
   public set setPreferredLanguages(value: Array<string>) {
     this.preferredLanguages = value;
+  }
+  public set setRegisteredUsers(value: Array<User>) {
+    this.registeredUsers = value;
   }
   public set setNgoName(value: string) {
     this.ngoName = value;

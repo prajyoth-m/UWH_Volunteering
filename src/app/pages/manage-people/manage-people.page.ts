@@ -58,4 +58,8 @@ export class ManagePeoplePage implements OnInit {
       this.refresh();
     });
   }
+  changeRole(user: User) {
+    user.editRole = false;
+    this.firebase.updateUserRole(user.id, user.role);
+  }
 }

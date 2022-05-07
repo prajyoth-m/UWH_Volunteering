@@ -67,6 +67,14 @@ const routes: Routes = [
     path: 'create-user',
     loadChildren: () => import('./pages/create-user/create-user.module').then( m => m.CreateUserPageModule)
   },
+  {
+    path: 'registered-people',
+    loadChildren: () => import('./pages/registered-people/registered-people.module').then( m => m.RegisteredPeoplePageModule)
+  },
+  {
+    path: 'event-editor',
+    loadChildren: () => import('./pages/event-editor/event-editor.module').then( m => m.EventEditorPageModule)
+  },
 ];
 
 @NgModule({

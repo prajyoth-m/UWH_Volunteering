@@ -28,14 +28,14 @@
           </ion-item>
           <ion-item-options>
             <ion-item-option
-              style="background-color: rgb(255, 30, 10, 0.5);"
+              class="danger-transp"
               (click)="removeSession(session)"
               *ngIf="sessions.sessions.includes(session)"
             >
               Remove
             </ion-item-option>
             <ion-item-option
-              style="background-color: rgb(20, 160, 40, 0.5);"
+              class="success-transp"
               (click)="addSession(session)"
               *ngIf="!sessions.sessions.includes(session)"
             >

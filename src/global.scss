@@ -25,3 +25,15 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+.danger-transp{
+  background-color: rgb(255, 30, 10, 0.5);
+}
+.success-transp{
+  background-color: rgb(20, 160, 40, 0.5);
+}
+.pb-1{
+  padding-bottom: 1rem;
+}
+.pt-1{
+  padding-top: 1rem;
+}

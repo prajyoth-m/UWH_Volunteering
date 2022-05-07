@@ -53,10 +53,8 @@ export class                                                ContributeModalPage 
     this.sessions.sessions = this.sessions.sessions.filter(
       (e) => e.date !== eventDate.date
     );
-    console.log(this.sessions.sessions);
   }
   submit() {
-    console.log(this.sessions);
     this.firebase.updateUserEvents(
       this.sessions,
       this.firebase.auth.currentUser.uid
