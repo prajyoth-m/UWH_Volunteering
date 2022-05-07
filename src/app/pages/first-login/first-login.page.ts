@@ -42,8 +42,9 @@ export class FirstLoginPage implements OnInit {
   }
 
   updateProfile() {
-    if (this.phoneNumber) {
+    if (this.phoneNumber ) {
       this.waitForPhone = true;
+
       const phoneProvider = new PhoneAuthProvider(this.firebase.auth);
       phoneProvider
         .verifyPhoneNumber('+91' + this.phoneNumber, this.verifier)
@@ -66,14 +67,12 @@ export class FirstLoginPage implements OnInit {
                     .updateUserPhoneNumber(cred)
                     .then(() => {
                       console.log('successfully updated');
-                      if (!this.displayName && !this.error) {
+                      if (!this.error) {
                         this.waitForPhone = false;
-                        this.verifier.clear();
                         this.router.navigateByUrl('/home');
                       }
                     })
                     .catch(async (err) => {
-                      this.verifier.clear();
                       let errMsg = '';
                       switch (err.code) {
                         case 'auth/account-exists-with-different-credential':
@@ -105,7 +104,6 @@ export class FirstLoginPage implements OnInit {
           console.error(e);
           this.error = true;
           this.waitForPhone = false;
-          this.verifier.clear();
         });
     }
     if (this.displayName) {

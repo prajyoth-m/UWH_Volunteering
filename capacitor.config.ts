@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.uwh.vol',
   appName: 'UWH_Volunteering',
   webDir: 'public',
   bundledWebRuntime: false
