@@ -6,83 +6,97 @@
 
 <ion-content>
   <ion-card *ngFor="let event of events;let i = index" class="events">
-    <div *ngIf="!event.isCompleted">
-      <div style="position: relative">
-        <img [src]="event.photo" />
-        <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">
-          <ion-fab-button>
-            <ion-icon
-              md="caret-back"
-              ios="chevron-back-circle-outline"
-            ></ion-icon>
+    <div style="position: relative">
+      <img [src]="event.photo" />
+      <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">
+        <ion-fab-button>
+          <ion-icon
+            md="caret-back"
+            ios="chevron-back-circle-outline"
+          ></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="start">
+          <ion-fab-button color="danger" (click)="deleteEvent(event.id)">
+            <ion-icon name="trash"></ion-icon>
           </ion-fab-button>
-          <ion-fab-list side="start">
-            <ion-fab-button color="danger" (click)="deleteEvent(event.id)">
-              <ion-icon name="trash"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button color="light" (click)="editEvent(event)">
-              <ion-icon name="create"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button color="light" (click)="registeredPeople(event)">
-              <ion-icon name="people"></ion-icon>
-            </ion-fab-button>
-          </ion-fab-list>
-        </ion-fab>
-        <ion-fab vertical="top" horizontal="end" slot="fixed" *ngIf="event.behindDate">
-          <ion-fab-button size="small" color="warning" [id]="'trigger-button'+i">
-            <ion-icon name="warning"> </ion-icon>
+          <ion-fab-button color="light" (click)="editEvent(event)">
+            <ion-icon name="create"></ion-icon>
           </ion-fab-button>
-        </ion-fab>
-        <ion-popover [trigger]="'trigger-button'+i">
-          <ng-template>
-            <ion-content>
-              Event dates are in the past please consider revising the dates!
-            </ion-content>
-          </ng-template>
-        </ion-popover>
-      </div>
-      <ion-card-header>
-        <ion-card-title>{{event.name}}</ion-card-title>
-        <ion-card-subtitle>
-          <ion-chip outline color="primary">
-            <ion-icon name="eye" color="primary"></ion-icon>
-            <ion-label>Viewers: {{event.beneficiaries}}</ion-label>
-          </ion-chip>
-          <ion-chip outline color="primary">
-            <ion-icon name="ear" color="primary"></ion-icon>
-            <ion-label>Ages: {{event.ageGroup}}</ion-label>
-          </ion-chip>
-          <ion-chip outline color="primary">
-            <ion-icon name="business" color="primary"></ion-icon>
-            <ion-label>NGO: {{event.ngoName}}</ion-label>
-          </ion-chip>
-          <ion-chip outline color="primary">
-            <ion-icon name="language" color="primary"></ion-icon>
-            <ion-label>Languages: {{event.preferredLanguages}}</ion-label>
-          </ion-chip>
-        </ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content> {{event.description}} </ion-card-content>
-      <ion-accordion-group>
-        <ion-accordion value="sessions">
-          <ion-item slot="header">
-            <ion-label>Sessions</ion-label>
-            <ion-badge slot="start" color="secondary">
-              {{event.sessions}}
-            </ion-badge>
-          </ion-item>
-          <ion-list slot="content">
-            <ion-item *ngFor="let session of event.dates">
-              <ion-icon name="{{session.icon}}" slot="start"></ion-icon>
-              <ul>
-                <li>{{session.description}}</li>
-                <li>{{session.date.toDate() | date:'dd-MMM-yyyy hh:mm a'}}</li>
-              </ul>
-            </ion-item>
-          </ion-list>
-        </ion-accordion>
-      </ion-accordion-group>
+          <ion-fab-button color="light" (click)="registeredPeople(event)">
+            <ion-icon name="people"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button color="success" (click)="completeEvent(event)">
+            <ion-icon name="checkmark"></ion-icon>
+          </ion-fab-button>
+        </ion-fab-list>
+      </ion-fab>
+      <ion-fab
+        vertical="top"
+        horizontal="end"
+        slot="fixed"
+        *ngIf="event.behindDate && !event.isCompleted"
+      >
+        <ion-fab-button size="small" color="warning" [id]="'trigger-button'+i">
+          <ion-icon name="warning"> </ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <ion-fab
+        vertical="top"
+        horizontal="end"
+        slot="fixed"
+        *ngIf="event.isCompleted"
+      >
+        <ion-fab-button size="small" color="success" [id]="'trigger-button'+i">
+          <ion-icon name="checkmark"> </ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <ion-popover [trigger]="'trigger-button'+i">
+        <ng-template>
+          <ion-content> Event marked as complete! </ion-content>
+        </ng-template>
+      </ion-popover>
     </div>
+    <ion-card-header>
+      <ion-card-title>{{event.name}}</ion-card-title>
+      <ion-card-subtitle>
+        <ion-chip outline color="primary">
+          <ion-icon name="eye" color="primary"></ion-icon>
+          <ion-label>Viewers: {{event.beneficiaries}}</ion-label>
+        </ion-chip>
+        <ion-chip outline color="primary">
+          <ion-icon name="ear" color="primary"></ion-icon>
+          <ion-label>Ages: {{event.ageGroup}}</ion-label>
+        </ion-chip>
+        <ion-chip outline color="primary">
+          <ion-icon name="business" color="primary"></ion-icon>
+          <ion-label>NGO: {{event.ngoName}}</ion-label>
+        </ion-chip>
+        <ion-chip outline color="primary">
+          <ion-icon name="language" color="primary"></ion-icon>
+          <ion-label>Languages: {{event.preferredLanguages}}</ion-label>
+        </ion-chip>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content> {{event.description}} </ion-card-content>
+    <ion-accordion-group>
+      <ion-accordion value="sessions">
+        <ion-item slot="header">
+          <ion-label>Sessions</ion-label>
+          <ion-badge slot="start" color="secondary">
+            {{event.sessions}}
+          </ion-badge>
+        </ion-item>
+        <ion-list slot="content">
+          <ion-item *ngFor="let session of event.dates">
+            <ion-icon name="{{session.icon}}" slot="start"></ion-icon>
+            <ul>
+              <li>{{session.description}}</li>
+              <li>{{session.date.toDate() | date:'dd-MMM-yyyy hh:mm a'}}</li>
+            </ul>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>
+    </ion-accordion-group>
   </ion-card>
   <ion-fab
     horizontal="end"

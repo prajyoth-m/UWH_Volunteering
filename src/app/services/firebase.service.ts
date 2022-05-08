@@ -263,6 +263,13 @@ export class FirebaseService {
       payload.location.latitude,
       payload.location.longitude
     );
+    payload.registeredUsers.forEach((element) => {
+      element.events.forEach((el) => {
+        el.sessions.forEach((ele) => {
+          ele.date = new Timestamp(ele.date.seconds, ele.date.nanoseconds);
+        });
+      });
+    });
     return updateDoc(doc(db, 'events', eventID), payload);
   }
   updateUserRole(userID: string, roleInput: string) {

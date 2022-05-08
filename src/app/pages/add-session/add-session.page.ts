@@ -23,7 +23,6 @@ export class AddSessionPage implements OnInit {
   ngOnInit() {
     if (this.sessionEdit) {
       this.date =this.sessionEdit.date.toDate().toISOString(); //DD-MMM-YY HH:mm
-      console.log(this.date);
       this.icon = this.sessionEdit.icon;
       this.link = this.sessionEdit.link;
       this.desc = this.sessionEdit.description;

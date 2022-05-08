@@ -5,6 +5,7 @@ import { AddEventPage } from '../add-event/add-event.page';
 import { Event } from 'src/app/models/event';
 import { RegisteredPeoplePage } from '../registered-people/registered-people.page';
 import { EventEditorPage } from '../event-editor/event-editor.page';
+import { CompleteEventPage } from '../complete-event/complete-event.page';
 
 @Component({
   selector: 'app-manage-events',
@@ -76,6 +77,22 @@ export class ManageEventsPage implements OnInit {
   async editEvent(eventEdit: Event) {
     const peopleModal = await this.modalController.create({
       component: EventEditorPage,
+      cssClass: 'edit-event-modal',
+      componentProps: {
+        controller: this.modalController,
+        event: eventEdit,
+      },
+      breakpoints: [0, 0.5, 0.75, 1],
+      initialBreakpoint: 0.5,
+    });
+    peopleModal.onDidDismiss().then((res) => {
+      this.refresh(true);
+    });
+    return await peopleModal.present();
+  }
+  async completeEvent(eventEdit: Event){
+    const peopleModal = await this.modalController.create({
+      component: CompleteEventPage,
       cssClass: 'edit-event-modal',
       componentProps: {
         controller: this.modalController,

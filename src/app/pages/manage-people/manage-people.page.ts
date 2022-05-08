@@ -3,6 +3,7 @@ import { getDoc } from '@firebase/firestore';
 import { DocumentReference } from 'firebase/firestore';
 import { Badge } from 'src/app/models/badge';
 import { Event } from 'src/app/models/event';
+import { Session } from 'src/app/models/session';
 import { User } from 'src/app/models/user';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -31,14 +32,6 @@ export class ManagePeoplePage implements OnInit {
             nweBadge.name = badgeData.name;
             nweBadge.photo = badgeData.photo;
             user.badges.push(nweBadge);
-          });
-        });
-        user.events = new Array();
-        userData.events.forEach((event) => {
-          this.firebase.getEventByID(event.id).then((eventSnap) => {
-            const newEvent = new Event();
-            Object.assign(newEvent, eventSnap.data());
-            user.events.push(newEvent);
           });
         });
         this.users.push(user);

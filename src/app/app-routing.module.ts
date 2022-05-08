@@ -75,6 +75,10 @@ const routes: Routes = [
     path: 'event-editor',
     loadChildren: () => import('./pages/event-editor/event-editor.module').then( m => m.EventEditorPageModule)
   },
+  {
+    path: 'complete-event',
+    loadChildren: () => import('./pages/complete-event/complete-event.module').then( m => m.CompleteEventPageModule)
+  },
 ];
 
 @NgModule({
