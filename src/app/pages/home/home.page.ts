@@ -13,6 +13,7 @@ export class HomePage implements OnInit {
   registeredEvents: number;
   userRole: string;
   displayPic: string;
+  displayAPK = true;
   constructor(private firebase: FirebaseService, private router: Router) {
     this.currentUser = this.firebase.auth.currentUser;
     if (!this.currentUser) {
@@ -61,4 +62,5 @@ export class HomePage implements OnInit {
       this.router.navigateByUrl('');
     });
   }
+  downlodApp(){}
 }

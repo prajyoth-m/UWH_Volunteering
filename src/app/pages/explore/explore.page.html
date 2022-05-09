@@ -43,6 +43,17 @@
             <ion-icon name="add"> </ion-icon>
           </ion-fab-button>
         </ion-fab>
+        <ion-fab
+          vertical="top"
+          horizontal="start"
+          size="small"
+          slot="fixed"
+          *ngIf="upcomingView && verifiedAccount && isVolunteer"
+        >
+          <ion-fab-button (click)="openInMaps(event)">
+            <ion-icon name="navigate"> </ion-icon>
+          </ion-fab-button>
+        </ion-fab>
       </div>
       <ion-card-header>
         <ion-card-title>{{event.name}}</ion-card-title>

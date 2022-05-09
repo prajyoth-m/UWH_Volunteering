@@ -7,6 +7,7 @@ import { Session } from 'src/app/models/session';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ContributeModalPage } from '../contribute-modal/contribute-modal.page';
 import { sendEmailVerification } from 'firebase/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-explore',
@@ -24,7 +25,8 @@ export class ExplorePage implements OnInit {
   isVolunteer: boolean;
   constructor(
     private firebase: FirebaseService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class ExplorePage implements OnInit {
       .getUserByID(this.firebase.auth.currentUser.uid)
       .then((snap) => {
         this.registeredEvents.push(...snap.data().events);
-        this.isVolunteer = snap.data().role==='volunteer';
+        this.isVolunteer = snap.data().role === 'volunteer';
       })
       .then((res) => {
         this.firebase.getEvents().then((snap) => {
@@ -56,6 +58,8 @@ export class ExplorePage implements OnInit {
             const event = new Event();
             event.id = doc.id;
             Object.assign(event, doc.data());
+            event.location.lat = doc.data().location._lat;
+            event.location.long = doc.data().location._long;
             if (this.registeredEvents.find((ev) => ev.id === doc.id)) {
               const registeredEvts = new Array<EventDate>();
               registeredEvts.push(
@@ -111,7 +115,7 @@ export class ExplorePage implements OnInit {
     await modal.present();
     await modal.onDidDismiss().then((res) => {
       this.refresh();
-      const evt = {detail:{value:'UpcomingEvents'}};
+      const evt = { detail: { value: 'UpcomingEvents' } };
       this.segmentChanged(evt);
       // Create the event
       const cstevnt = new CustomEvent('subscriptions');
@@ -196,5 +200,14 @@ export class ExplorePage implements OnInit {
           document.dispatchEvent(cstevnt);
         });
     }
+  }
+  openInMaps(event: Event) {
+    const mapsLink =
+      'https://www.google.com/maps/dir/?api=1&destination=' +
+      event.location.lat +
+      ',' +
+      event.location.long;
+    console.log(event.location.lat + ',' + event.location.long);
+    window.open(mapsLink, '_blank');
   }
 }

@@ -1,4 +1,13 @@
 <ion-header [translucent]="true">
+  <ion-toolbar color="dark" *ngIf="displayAPK">
+    <ion-buttons slot="start">
+      <ion-icon name="close" (click)="displayAPK=false"></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-icon name="logo-google-playstore"></ion-icon>
+      <ion-button download="UWH_APP.apk" href="/assets/UWH_APP.apk">Download Android APP</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
   <ion-toolbar color="primary">
     <ion-avatar
       slot="start"
