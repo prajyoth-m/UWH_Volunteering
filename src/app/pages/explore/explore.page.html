@@ -4,11 +4,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content >
   <ion-segment
     (ionChange)="segmentChanged($event)"
     color="dark"
     value="UpcomingEvents"
+    style="margin-top: 3.4rem;"
   >
     <ion-segment-button value="UpcomingEvents">
       <ion-label>Upcoming Events</ion-label>
@@ -28,8 +29,8 @@
       Verify Profile
     </p>
   </div>
-  <div *ngFor="let event of events">
-    <ion-card class="events">
+  <div *ngFor="let event of events" class="events">
+    <ion-card >
       <div style="position: relative">
         <img [src]="event.photo" />
         <ion-fab

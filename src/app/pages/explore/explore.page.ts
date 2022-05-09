@@ -80,9 +80,10 @@ export class ExplorePage implements OnInit {
             } else {
               event.sessions = undefined;
             }
-            event.registrationCount = doc
-              .data()
-              .registeredUsers.filter((user) => user.approved).length;
+            event.registrationCount = doc.data().registeredUsers
+              ? doc.data().registeredUsers.filter((user) => user.approved)
+                  .length
+              : '0';
             if (event.isCompleted) {
               this.completedEvents.push(event);
             } else {
