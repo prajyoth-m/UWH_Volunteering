@@ -6,7 +6,7 @@
 
 <ion-content >
   <ion-segment
-    (ionChange)="segmentChanged($event)"
+    (ionChange)="segmentChanged($event['detail'].value)"
     color="dark"
     value="UpcomingEvents"
     style="margin-top: 3.4rem;"
@@ -29,7 +29,8 @@
       Verify Profile
     </p>
   </div>
-  <div *ngFor="let event of events" class="events">
+  <ion-searchbar animated placeholder="Search Events" [(ngModel)]="searchEvent"></ion-searchbar>
+  <div *ngFor="let event of events | filterEvents: 'name':searchEvent" class="events">
     <ion-card >
       <div style="position: relative">
         <img [src]="event.photo" />
@@ -79,16 +80,16 @@
       </ion-card-header>
       <ion-card-content> {{event.description}} </ion-card-content>
       <ion-accordion-group>
-        <ion-accordion value="sessions" *ngIf="event.sessions">
+        <ion-accordion value="sessions" *ngIf="isEventApproved(event)">
           <ion-item slot="header">
             <ion-label>My Sessions</ion-label>
             <ion-badge slot="start" color="secondary">
-              {{event.sessions}}
+              {{getUserSessions(event).length}}
             </ion-badge>
           </ion-item>
           <ion-list slot="content">
-            <div *ngFor="let session of event.dates">
-              <ion-item-sliding *ngIf="session.isRegistered" #slidingItem>
+            <div *ngFor="let session of getUserSessions(event)">
+              <ion-item-sliding #slidingItem>
                 <ion-item>
                   <ion-icon name="{{session.icon}}" slot="start"></ion-icon>
                   <ion-label>

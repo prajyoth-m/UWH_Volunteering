@@ -14,6 +14,7 @@ import { CompleteEventPage } from '../complete-event/complete-event.page';
 })
 export class ManageEventsPage implements OnInit {
   events: Array<Event>;
+  searchEvent: string;
   modal: HTMLElement;
   constructor(
     private firebase: FirebaseService,

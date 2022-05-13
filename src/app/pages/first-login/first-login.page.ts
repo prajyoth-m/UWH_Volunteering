@@ -66,7 +66,6 @@ export class FirstLoginPage implements OnInit {
                   this.firebase
                     .updateUserPhoneNumber(cred)
                     .then(() => {
-                      console.log('successfully updated');
                       if (!this.error) {
                         this.waitForPhone = false;
                         this.router.navigateByUrl('/home');

@@ -1,0 +1,6 @@
+{
+	"appId": "com.uwh.vol",
+	"appName": "UWH_Volunteering",
+	"webDir": "public",
+	"bundledWebRuntime": false
+}

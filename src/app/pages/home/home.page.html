@@ -5,7 +5,9 @@
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-icon name="logo-google-playstore"></ion-icon>
-      <ion-button download="UWH_APP.apk" href="/assets/UWH_APP.apk">Download Android APP</ion-button>
+      <ion-button download="UWH_APP.apk" href="/assets/UWH_APP.apk"
+        >Download Android APP</ion-button
+      >
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar color="primary">
@@ -24,46 +26,48 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-tabs>
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="explore">
-        <ion-icon name="globe-outline"></ion-icon>
-        <ion-label>Explore</ion-label>
-      </ion-tab-button>
+  <div>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="explore">
+          <ion-icon name="globe-outline"></ion-icon>
+          <ion-label>Explore</ion-label>
+        </ion-tab-button>
 
-      <ion-tab-button tab="schedule" *ngIf="userRole==='volunteer'">
-        <ion-icon name="calendar"></ion-icon>
-        <ion-label>Upcomming Events</ion-label>
-        <ion-badge>{{registeredEvents}}</ion-badge>
-      </ion-tab-button>
+        <ion-tab-button tab="schedule" *ngIf="userRole==='volunteer'">
+          <ion-icon name="calendar"></ion-icon>
+          <ion-label>Upcomming Events</ion-label>
+          <ion-badge>{{registeredEvents}}</ion-badge>
+        </ion-tab-button>
 
-      <ion-tab-button
-        tab="manage-events"
-        *ngIf="userRole==='admin' || userRole==='manager'"
-      >
-        <ion-icon name="calendar"></ion-icon>
-        <ion-label>Manage Events</ion-label>
-      </ion-tab-button>
+        <ion-tab-button
+          tab="manage-events"
+          *ngIf="userRole==='admin' || userRole==='manager'"
+        >
+          <ion-icon name="calendar"></ion-icon>
+          <ion-label>Manage Events</ion-label>
+        </ion-tab-button>
 
-      <ion-tab-button tab="social" *ngIf="userRole==='volunteer';else manage">
-        <ion-icon name="person"></ion-icon>
-        <ion-label>
-          <ion-label>Profile</ion-label>
-        </ion-label>
-      </ion-tab-button>
-      <ng-template #manage>
-        <ion-tab-button tab="manage-people">
-          <ion-icon name="people-outline"></ion-icon>
+        <ion-tab-button tab="social" *ngIf="userRole==='volunteer';else manage">
+          <ion-icon name="person"></ion-icon>
           <ion-label>
-            <ion-label>Manage People</ion-label>
+            <ion-label>Profile</ion-label>
           </ion-label>
         </ion-tab-button>
-      </ng-template>
+        <ng-template #manage>
+          <ion-tab-button tab="manage-people">
+            <ion-icon name="people-outline"></ion-icon>
+            <ion-label>
+              <ion-label>Manage People</ion-label>
+            </ion-label>
+          </ion-tab-button>
+        </ng-template>
 
-      <ion-tab-button tab="about">
-        <ion-icon name="information-circle"></ion-icon>
-        <ion-label>About Us</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
+        <ion-tab-button tab="about">
+          <ion-icon name="information-circle"></ion-icon>
+          <ion-label>About Us</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </div>
 </ion-content>

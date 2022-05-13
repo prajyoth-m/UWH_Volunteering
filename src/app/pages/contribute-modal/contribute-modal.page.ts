@@ -59,37 +59,50 @@ export class ContributeModalPage implements OnInit {
     return regUser;
   }
   submit() {
-    this.firebase
-      .updateUserEvents(this.sessions, this.firebase.auth.currentUser.uid)
-      .then(async () => {
-        if (this.contributeEvent.registeredUsers) {
-          if (
-            !this.contributeEvent.registeredUsers.find(
-              (e) => e.id === this.firebase.auth.currentUser.uid
-            )
-          ) {
+    if (this.sessions.sessions.length === 0) {
+      this.firebase
+        .removeUserEvent(this.sessions.id, this.firebase.auth.currentUser.uid)
+        .then((res) => {
+          this.controller.dismiss();
+          // Create the event
+          const cstevnt = new CustomEvent('subscriptions');
+
+          // Dispatch/Trigger/Fire the event
+          document.dispatchEvent(cstevnt);
+        });
+    } else {
+      this.firebase
+        .updateUserEvents(this.sessions, this.firebase.auth.currentUser.uid)
+        .then(async () => {
+          if (this.contributeEvent.registeredUsers) {
+            if (
+              !this.contributeEvent.registeredUsers.find(
+                (e) => e.id === this.firebase.auth.currentUser.uid
+              )
+            ) {
+              this.contributeEvent.registeredUsers.push(
+                await this.createUserData()
+              );
+            } else {
+              this.contributeEvent.registeredUsers.find(
+                (e) => e.id === this.firebase.auth.currentUser.uid
+              ).events = await (
+                await this.createUserData()
+              ).events;
+            }
+          } else {
+            this.contributeEvent.registeredUsers = new Array();
             this.contributeEvent.registeredUsers.push(
               await this.createUserData()
             );
-          } else {
-            this.contributeEvent.registeredUsers.find(
-              (e) => e.id === this.firebase.auth.currentUser.uid
-            ).events = await (
-              await this.createUserData()
-            ).events;
           }
-        } else {
-          this.contributeEvent.registeredUsers = new Array();
-          this.contributeEvent.registeredUsers.push(
-            await this.createUserData()
-          );
-        }
 
-        this.firebase
-          .updateEvent(this.contributeEvent.id, this.contributeEvent)
-          .then(() => {
-            this.controller.dismiss();
-          });
-      });
+          this.firebase
+            .updateEvent(this.contributeEvent.id, this.contributeEvent)
+            .then(() => {
+              this.controller.dismiss();
+            });
+        });
+    }
   }
 }

@@ -5,7 +5,8 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let event of events;let i = index" class="events">
+  <ion-searchbar animated placeholder="Search Events" [(ngModel)]="searchEvent" style="margin-top: 3.4rem;"></ion-searchbar>
+  <ion-card *ngFor="let event of events | filterEvents: 'name':searchEvent let i = index" class="events">
     <div style="position: relative">
       <img [src]="event.photo" />
       <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">

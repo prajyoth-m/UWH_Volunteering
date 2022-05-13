@@ -44,13 +44,14 @@ export class SchedulePage implements OnInit {
       });
   }
 
+  //TODO not being used yet
   async presentModal(event: Event) {
-    //TODO create a popup form asking why leaving
     this.firebase
       .getUserByID(this.firebase.auth.currentUser.uid)
       .then((snap) => {
         const events = snap.data().events;
         const filteredEvent = events.filter((evnt) => evnt.id !== event.id);
+
         this.firebase.updateUserEvents(
           filteredEvent,
           this.firebase.auth.currentUser.uid
@@ -103,5 +104,14 @@ export class SchedulePage implements OnInit {
           document.dispatchEvent(cstevnt);
         });
     }
+  }
+  isEventApproved(event: Event): boolean {
+    return event.registeredUsers.find(
+      (e) => e.id === this.firebase.auth.currentUser.uid
+    )
+      ? event.registeredUsers.find(
+          (e) => e.id === this.firebase.auth.currentUser.uid
+        ).approved
+      : false;
   }
 }

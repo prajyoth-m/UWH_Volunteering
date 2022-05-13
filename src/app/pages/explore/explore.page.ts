@@ -1,5 +1,6 @@
+/* eslint-disable no-underscore-dangle */
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { Event } from 'src/app/models/event';
 import { EventDate } from 'src/app/models/event-date';
 import { User } from 'src/app/models/user';
@@ -16,22 +17,22 @@ import { Router } from '@angular/router';
 })
 export class ExplorePage implements OnInit {
   events: Array<Event>;
+  searchEvent: string;
   modal: HTMLElement;
   registeredEvents: Array<Session>;
   completedEvents: Array<Event>;
   upcomingEvents: Array<Event>;
-  upcomingView: boolean;
+  upcomingView= true;
   verifiedAccount: boolean;
   isVolunteer: boolean;
   constructor(
     private firebase: FirebaseService,
     private modalController: ModalController,
+    private toastController: ToastController,
     private router: Router
   ) {}
 
   ngOnInit() {
-    this.verifiedAccount = this.firebase.auth.currentUser.emailVerified;
-    this.upcomingView = true;
   }
 
   ionViewWillEnter() {
@@ -39,9 +40,16 @@ export class ExplorePage implements OnInit {
     this.events = this.upcomingEvents;
   }
   triggerEmail() {
-    sendEmailVerification(this.firebase.auth.currentUser);
+    sendEmailVerification(this.firebase.auth.currentUser).then(async () => {
+      const toast = await this.toastController.create({
+        message: 'Verification email sent to your email id.',
+        duration: 2000,
+      });
+      toast.present();
+    });
   }
   refresh() {
+    this.verifiedAccount = this.firebase.auth.currentUser.emailVerified;
     this.events = new Array();
     this.registeredEvents = new Array();
     this.completedEvents = new Array();
@@ -89,12 +97,13 @@ export class ExplorePage implements OnInit {
             } else {
               this.upcomingEvents.push(event);
             }
+            this.segmentChanged('UpcomingEvents');
           });
         });
       });
   }
-  segmentChanged(event: any) {
-    if (event.detail.value === 'CompletedEvents') {
+  segmentChanged(value: string) {
+    if (value === 'CompletedEvents') {
       this.events = this.completedEvents;
       this.upcomingView = false;
     } else {
@@ -117,7 +126,6 @@ export class ExplorePage implements OnInit {
     await modal.onDidDismiss().then((res) => {
       this.refresh();
       const evt = { detail: { value: 'UpcomingEvents' } };
-      this.segmentChanged(evt);
       // Create the event
       const cstevnt = new CustomEvent('subscriptions');
 
@@ -184,6 +192,7 @@ export class ExplorePage implements OnInit {
       this.firebase
         .removeUserEvent(eventID, this.firebase.auth.currentUser.uid)
         .then((res) => {
+          this.refresh();
           // Create the event
           const cstevnt = new CustomEvent('subscriptions');
 
@@ -194,6 +203,7 @@ export class ExplorePage implements OnInit {
       this.firebase
         .updateUserEvents(currSession, this.firebase.auth.currentUser.uid)
         .then((res) => {
+          this.refresh();
           // Create the event
           const cstevnt = new CustomEvent('subscriptions');
 
@@ -208,7 +218,26 @@ export class ExplorePage implements OnInit {
       event.location.lat +
       ',' +
       event.location.long;
-    console.log(event.location.lat + ',' + event.location.long);
     window.open(mapsLink, '_blank');
+  }
+  getUserSessions(event: Event) {
+    return event.registeredUsers
+      ? event.registeredUsers
+          .find((e) => e.id === this.firebase.auth.currentUser.uid)
+          .events.find((e) => e.id === event.id).sessions
+      : [];
+  }
+  isEventApproved(event: Event) {
+    if (
+      event.registeredUsers.find(
+        (e) => e.id === this.firebase.auth.currentUser.uid
+      )
+    ) {
+      return event.registeredUsers
+        ? event.registeredUsers.find(
+            (e) => e.id === this.firebase.auth.currentUser.uid
+          ).approved
+        : false;
+    }
   }
 }

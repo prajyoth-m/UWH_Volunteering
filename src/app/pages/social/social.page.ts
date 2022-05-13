@@ -31,7 +31,6 @@ export class SocialPage implements OnInit {
   }
 
   ngOnInit() {
-    this.userContributions = 0;
     this.verifier = new RecaptchaVerifier(
       'recaptcha-container',
       {
@@ -44,6 +43,7 @@ export class SocialPage implements OnInit {
     this.refresh();
   }
   refresh() {
+    this.userContributions = 0;
     this.userData = new User();
     this.userData.events = new Array();
     this.firebase
@@ -51,9 +51,6 @@ export class SocialPage implements OnInit {
       .then((snap) => {
         const userRef = snap.data();
         Object.assign(this.userData, userRef);
-        this.userData.contributions.forEach((evnt) => {
-          this.userContributions += evnt.sessions ? evnt.sessions.length : 1;
-        });
       });
     this.nameinput = this.firebase.auth.currentUser.displayName;
     this.emailInput = this.firebase.auth.currentUser.email;
@@ -99,7 +96,6 @@ export class SocialPage implements OnInit {
                 this.firebase
                   .updateUserPhoneNumber(cred)
                   .then(() => {
-                    console.log('successfully updated');
                     this.refresh();
                   })
                   .catch((err) => {

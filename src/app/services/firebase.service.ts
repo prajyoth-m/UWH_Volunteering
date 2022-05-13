@@ -221,9 +221,10 @@ export class FirebaseService {
     return deleteDoc(doc(db, 'users', userID));
   }
   updateUserEvents(eventsIn: Session, userID: string) {
-    return this.getUserByID(userID).then((snap) => {
+    return this.getUserByID(userID).then(async (snap) => {
       const existingSessions = snap.data().events;
       const finalEvents = new Array();
+      //adding all existing events as is
       existingSessions.forEach((session) => {
         if (session.id !== eventsIn.id) {
           const event = {
@@ -234,20 +235,43 @@ export class FirebaseService {
           finalEvents.push(event);
         }
       });
+      //modifying the event passed to the method
       finalEvents.push({
         id: eventsIn.id,
         name: eventsIn.name,
         sessions: [...eventsIn.sessions],
       });
+      //preparing the updated sessions in the event
+      const eventData = (await this.getEventByID(eventsIn.id)).data();
+      //getting existing sessions of the user
+      const currUsrEvents = eventData.registeredUsers
+        ? eventData.registeredUsers.find((e) => e.id === userID)
+          ? eventData.registeredUsers
+              .find((e) => e.id === userID)
+              .events.find((e) => e.id === eventsIn.id)
+          : undefined
+        : undefined;
+      //modifying the user sessions from the event
+      if (currUsrEvents) {
+        currUsrEvents.sessions = eventsIn.sessions;
+        await updateDoc(doc(db,'events',eventsIn.id),eventData);
+      }
+      //modifying the user sessions from the user
       return updateDoc(doc(db, 'users', userID), {
         events: finalEvents,
       });
     });
   }
   removeUserEvent(eventID: string, userID: string) {
-    return this.getUserByID(userID).then((snap) => {
+    return this.getUserByID(userID).then(async (snap) => {
+      //getting all the events from the user
       const existingSessions = snap.data().events;
       const finalEvents = new Array();
+      //removing the user from the event
+      const currEventData = (await this.getEventByID(eventID)).data();
+      currEventData.registeredUsers = currEventData.registeredUsers.filter(usr=>usr.id!==userID);
+      await updateDoc(doc(db,'events',eventID),currEventData);
+      //removing the event from the user
       finalEvents.push(...existingSessions.filter((e) => e.id !== eventID));
       return updateDoc(doc(db, 'users', userID), {
         events: finalEvents,

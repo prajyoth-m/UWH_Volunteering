@@ -127,7 +127,6 @@ export class CreateUserPage implements OnInit {
                 this.firebase
                   .updateUserPhoneNumber(cred)
                   .then(() => {
-                    console.log('successfully updated');
                     if (!this.phoneNumberInvalid) {
                       this.router.navigateByUrl('/home');
                     }
